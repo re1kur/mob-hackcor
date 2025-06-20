@@ -4,7 +4,7 @@ services:
     env_file:
       - user-management-service/.env
     ports:
-      - "5433:5432"
+      - "5433:5433"
   user-management-service:
     env_file:
       - user-management-service/.env

@@ -1,6 +1,10 @@
 spring:
   application:
     name: user-management-service
+  docker:
+    compose:
+      enabled: true
+      file: ./user-management-service/docker-compose.yml
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
