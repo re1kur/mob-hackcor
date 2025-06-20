@@ -18,7 +18,7 @@ import re1kur.ums.jwt.JwtProvider;
 import re1kur.ums.jwt.JwtToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.mapper.UserMapper;
-import re1kur.ums.repository.UserRepository;
+import re1kur.ums.repository.sql.UserRepository;
 import re1kur.ums.service.impl.UserServiceImpl;
 
 import java.util.Optional;

@@ -3,16 +3,20 @@ package re1kur.ums.jwt.impl;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import re1kur.ums.entity.RefreshToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.jwt.Credentials;
 import re1kur.ums.jwt.JwtProvider;
 import re1kur.ums.jwt.JwtToken;
+import re1kur.ums.repository.redis.TokenRepository;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,6 +34,7 @@ import java.util.Date;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtProviderImpl implements JwtProvider {
     @Value("${custom.jwt.privateKeyPath}")
     private String privateKeyPath;
@@ -46,11 +51,19 @@ public class JwtProviderImpl implements JwtProvider {
     @Value("${custom.jwt.refresh-ttl-days}")
     private int refreshTtl;
 
+    private final TokenRepository repo;
+
     @Override
     @SneakyThrows
     public JwtToken getToken(User user) {
         Credentials credentials = new Credentials(user);
         return generate(credentials);
+    }
+
+    @Override
+    public boolean verifyToken(JWT refreshToken) {
+        RSAPublicKey publicKey = readPublicKeyFromFile(publicKeyPath);
+        return verifyJWTSign(publicKey, (SignedJWT) refreshToken);
     }
 
     public JwtToken generate(Credentials cred) throws JOSEException {
@@ -96,12 +109,21 @@ public class JwtProviderImpl implements JwtProvider {
         verifyJWTSign(publicKey, accessToken);
         verifyJWTSign(publicKey, refreshToken);
 
-        return JwtToken.builder()
+        JwtToken build = JwtToken.builder()
                 .body(accessToken.serialize())
                 .refreshToken(refreshToken.serialize())
                 .expiresAt(LocalDateTime.now().plusHours(accessTtl))
                 .refreshExpiresAt(LocalDateTime.now().plusDays(refreshTtl))
                 .build();
+
+        repo.save(RefreshToken.builder()
+                .issuedAt(LocalDateTime.now())
+                .id(cred.getClaims().get("sub"))
+                .expiredAt(build.expiresAt())
+                .body(build.refreshToken())
+                .build());
+
+        return build;
     }
 
     @SneakyThrows
@@ -130,9 +152,10 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     @SneakyThrows
-    private void verifyJWTSign(RSAPublicKey publicKey, SignedJWT jwt) {
+    private boolean verifyJWTSign(RSAPublicKey publicKey, SignedJWT jwt) {
         JWSVerifier verifier = new RSASSAVerifier(publicKey);
-        boolean verify = verifier.verify(jwt.getHeader(), jwt.getSigningInput(), jwt.getSignature());
-        log.info("Test verification with public key: {}", verify ? "DONE" : "FAILED");
+        boolean isVerified = verifier.verify(jwt.getHeader(), jwt.getSigningInput(), jwt.getSignature());
+        log.info("Test verification with public key: {}", isVerified ? "DONE" : "FAILED");
+        return isVerified;
     }
 }

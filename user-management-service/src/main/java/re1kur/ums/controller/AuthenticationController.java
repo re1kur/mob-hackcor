@@ -23,7 +23,7 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<JwtToken> login(@RequestBody @Valid LoginRequest request) {
         JwtToken body = service.login(request);
         return ResponseEntity.status(HttpStatus.FOUND).body(body);

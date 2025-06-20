@@ -132,7 +132,7 @@ public class AuthenticationControllerTest {
         ).thenReturn(JwtToken.builder().body("eyJaHeader.payload.signature").build());
 
         mvc.perform(MockMvcRequestBuilders
-                        .get(URL + "/login")
+                        .post(URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isFound())
@@ -149,7 +149,7 @@ public class AuthenticationControllerTest {
                 .build();
 
         mvc.perform(MockMvcRequestBuilders
-                        .get(URL + "/login")
+                        .post(URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -165,7 +165,7 @@ public class AuthenticationControllerTest {
                 .build();
 
         mvc.perform(MockMvcRequestBuilders
-                        .get(URL + "/login")
+                        .post(URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -188,7 +188,7 @@ public class AuthenticationControllerTest {
         )).thenThrow(UserNotFoundException.class);
 
         mvc.perform(MockMvcRequestBuilders
-                        .get(URL + "/login")
+                        .post(URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());

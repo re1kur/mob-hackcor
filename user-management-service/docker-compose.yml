@@ -6,3 +6,8 @@ services:
     container_name: userdb
     ports:
       - "5433:5432"
+  token-redis-database:
+    image: redis:latest
+    container_name: tokendb
+    ports:
+      - "6379:6379"

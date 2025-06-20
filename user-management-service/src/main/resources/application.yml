@@ -5,6 +5,9 @@ spring:
     compose:
       enabled: true
       file: ./user-management-service/docker-compose.yml
+  data:
+    redis:
+      url: ${SPRING_DATA_REDIS_URL}
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}

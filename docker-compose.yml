@@ -4,7 +4,15 @@ services:
     env_file:
       - user-management-service/.env
     ports:
-      - "5433:5433"
+      - "5433:5432"
+
+  ums-redis-database:
+    image: redis:latest
+    env_file:
+      - user-management-service/.env
+    ports:
+      - "6379:6379"
+
   user-management-service:
     env_file:
       - user-management-service/.env
