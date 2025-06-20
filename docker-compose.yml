@@ -4,8 +4,10 @@ services:
     env_file:
       - user-management-service/.env
     ports:
-      - "5433:5433"
+      - "5433:5432"
   user-management-service:
+    env_file:
+      - user-management-service/.env
     build:
       dockerfile: user-management-service/Dockerfile
       context: .

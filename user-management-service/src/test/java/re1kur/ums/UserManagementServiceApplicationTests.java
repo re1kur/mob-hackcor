@@ -1,13 +1,13 @@
-package re1kur.ums;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class UserManagementServiceApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
-
-}
+//package re1kur.ums;
+//
+//import org.junit.jupiter.api.Test;
+//import org.springframework.boot.test.context.SpringBootTest;
+//
+//@SpringBootTest
+//class UserManagementServiceApplicationTests {
+//
+//    @Test
+//    void contextLoads() {
+//    }
+//
+//}

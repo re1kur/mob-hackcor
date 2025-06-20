@@ -1,2 +1,6 @@
 C:\Users\reikur\Projects\mob-hackcor\core\src\main\java\re1kur\core\dto\UserDto.java
+C:\Users\reikur\Projects\mob-hackcor\core\src\main\java\re1kur\core\exception\InvalidCredentialsException.java
+C:\Users\reikur\Projects\mob-hackcor\core\src\main\java\re1kur\core\exception\UserAlreadyRegisteredException.java
+C:\Users\reikur\Projects\mob-hackcor\core\src\main\java\re1kur\core\exception\UserNotFoundException.java
+C:\Users\reikur\Projects\mob-hackcor\core\src\main\java\re1kur\core\payload\LoginRequest.java
 C:\Users\reikur\Projects\mob-hackcor\core\src\main\java\re1kur\core\payload\UserPayload.java
