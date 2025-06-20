@@ -5,6 +5,7 @@ import com.nimbusds.jwt.JWTParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import re1kur.core.exception.InvalidTokenException;
+import re1kur.core.exception.TokenMismatchException;
 import re1kur.core.exception.TokenNotFoundException;
 import re1kur.core.exception.UserNotFoundException;
 import re1kur.ums.entity.RefreshToken;
@@ -33,14 +34,13 @@ public class TokenServiceImpl implements TokenService {
         }
 
         String userIdStr = parsed.getJWTClaimsSet().getSubject();
-        UUID userId = UUID.fromString(userIdStr);
 
-        RefreshToken token = repo.findById(userId.toString()).orElseThrow(() -> new TokenNotFoundException("Token for user %s not found.".formatted(userId)));
+        RefreshToken token = repo.findById(userIdStr).orElseThrow(() -> new TokenNotFoundException("Token for user %s not found.".formatted(userIdStr)));
 
         if (!token.getBody().equals(refreshToken)) {
-            throw new InvalidTokenException("Refresh token mismatch");
+            throw new TokenMismatchException("Refresh token mismatch");
         }
-
+        UUID userId = UUID.fromString(userIdStr);
         User user = userRepo.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return jwtProvider.getToken(user);

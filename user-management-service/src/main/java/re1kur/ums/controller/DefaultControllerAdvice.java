@@ -45,4 +45,9 @@ public class DefaultControllerAdvice {
     public ResponseEntity<String> handleTokenNotFoundException(TokenNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(exception = TokenMismatchException.class)
+    public ResponseEntity<String> handleTokenMismatchException(TokenMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }
