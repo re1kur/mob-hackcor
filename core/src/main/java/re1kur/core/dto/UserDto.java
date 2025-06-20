@@ -6,6 +6,6 @@ import lombok.Builder;
 public record UserDto (
         String id,
         String email,
-        Boolean isVerified
+        Boolean enabled
 ) {
 }

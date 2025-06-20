@@ -45,7 +45,7 @@ public class AuthenticationControllerTest {
         UserDto expectedDto = UserDto.builder()
                 .id("HERE-MUST-BE-UUID-ID")
                 .email("email@example.com")
-                .isVerified(false)
+                .enabled(false)
                 .build();
 
         Mockito.when(service.register(UserPayload.builder()

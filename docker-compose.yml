@@ -1,0 +1,13 @@
+services:
+  ums-database:
+    image: postgres:17
+    env_file:
+      - user-management-service/.env
+    ports:
+      - "5433:5433"
+  user-management-service:
+    build:
+      dockerfile: user-management-service/Dockerfile
+      context: .
+    ports:
+      - "8081:8081"

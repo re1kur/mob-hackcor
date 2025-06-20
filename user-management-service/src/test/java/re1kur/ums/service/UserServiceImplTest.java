@@ -59,7 +59,7 @@ class UserServiceImplTest {
         UserDto expected = UserDto.builder()
                 .id("bdc76ed5-c3b5-4efd-b2cd-1cb3e244c676")
                 .email("email@example.com")
-                .isVerified(false)
+                .enabled(false)
                 .build();
 
         Mockito.when(repo.existsByEmail(Mockito.anyString())).thenReturn(false);
@@ -110,14 +110,14 @@ class UserServiceImplTest {
 
         Mockito.when(repo.findByEmail("email@example.com")).thenReturn(Optional.of(user));
         Mockito.when(encoder.matches("password", "encodedPassword")).thenReturn(true);
-        Mockito.when(jwtProvider.getToken(user.getId())).thenReturn(expected);
+        Mockito.when(jwtProvider.getToken(user)).thenReturn(expected);
 
         JwtToken result = Assertions.assertDoesNotThrow(() -> service.login(request));
         Assertions.assertEquals(expected, result);
 
         Mockito.verify(repo, Mockito.times(1)).findByEmail("email@example.com");
         Mockito.verify(encoder, Mockito.times(1)).matches("password", "encodedPassword");
-        Mockito.verify(jwtProvider, Mockito.times(1)).getToken(UUID.fromString("bdc76ed5-c3b5-4efd-b2cd-1cb3e244c676"));
+        Mockito.verify(jwtProvider, Mockito.times(1)).getToken(user);
     }
 
     @Test

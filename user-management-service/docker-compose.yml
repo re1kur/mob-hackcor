@@ -1,0 +1,8 @@
+services:
+  user-database:
+    image: postgres:17
+    env_file:
+      - .env
+    container_name: testdb
+    ports:
+      - "5433:5433"

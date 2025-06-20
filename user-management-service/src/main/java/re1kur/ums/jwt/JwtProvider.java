@@ -1,7 +1,7 @@
 package re1kur.ums.jwt;
 
-import java.util.UUID;
+import re1kur.ums.entity.User;
 
 public interface JwtProvider {
-    JwtToken getToken(UUID id);
+    JwtToken getToken(User user);
 }

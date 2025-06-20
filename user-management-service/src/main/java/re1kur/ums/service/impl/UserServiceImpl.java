@@ -41,6 +41,6 @@ public class UserServiceImpl implements UserService {
                         "User with email %s not exist.".formatted(request.email())));
         if (!encoder.matches(request.password(), user.getPassword()))
             throw new InvalidCredentialsException("Invalid password.");
-        return jwtProvider.getToken(user.getId());
+        return jwtProvider.getToken(user);
     }
 }
