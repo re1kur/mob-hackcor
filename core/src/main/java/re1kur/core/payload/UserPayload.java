@@ -11,5 +11,11 @@ public record UserPayload(
         String email,
         @Size(min = 6, max = 256, message = "The password must be between 6 and 256 characters long.")
         @NotBlank(message = "Password can be empty or contain backspace.")
-        String password) {
+        String password,
+        @NotBlank(message = "Firstname can be empty or contain backspace.")
+        @Size(min = 3, max = 64, message = "The firstname must be between 3 and 64 characters long.")
+        String firstname,
+        @NotBlank(message = "Lastname can be empty or contain backspace.")
+        @Size(max = 64, message = "The lastname must be greater 64 characters long.")
+        String lastname) {
 }

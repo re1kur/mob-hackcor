@@ -30,4 +30,8 @@ public class User {
             @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private UserInformation information;
 }

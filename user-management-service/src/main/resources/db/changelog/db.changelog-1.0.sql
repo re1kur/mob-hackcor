@@ -22,10 +22,19 @@ CREATE TABLE IF NOT EXISTS users_roles
     user_id uuid,
     role_id INT,
     PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (role_id) REFERENCES roles (id)
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
 );
 
 --changeset re1kur:4
 CREATE INDEX idx_users_roles_user_id ON users_roles (user_id);
 CREATE INDEX idx_users_roles_role_id ON users_roles (role_id);
+
+--changeset re1kur:5
+CREATE TABLE IF NOT EXISTS user_information
+(
+    user_id   uuid primary key,
+    firstname VARCHAR(64) NOT NULL,
+    lastname  VARCHAR(64) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);

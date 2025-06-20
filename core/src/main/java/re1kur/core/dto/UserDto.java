@@ -6,6 +6,8 @@ import lombok.Builder;
 public record UserDto (
         String id,
         String email,
+        String firstname,
+        String lastname,
         Boolean enabled
 ) {
 }
