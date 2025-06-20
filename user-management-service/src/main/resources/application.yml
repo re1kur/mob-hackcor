@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: user-management-service
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#  liquibase:
+#    change-log: file:db/changelog/db.changelog-master.yml
+#  sql:
+#    init:
+#      mode: never
+#  jpa:
+#    open-in-view: false
+
+server:
+  port: 8081
