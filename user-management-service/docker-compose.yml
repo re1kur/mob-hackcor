@@ -3,6 +3,6 @@ services:
     image: postgres:17
     env_file:
       - .env
-    container_name: testdb
+    container_name: userdb
     ports:
-      - "5433:5433"
+      - "5433:5432"

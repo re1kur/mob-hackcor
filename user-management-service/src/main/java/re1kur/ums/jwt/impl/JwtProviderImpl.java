@@ -24,7 +24,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -100,8 +99,8 @@ public class JwtProviderImpl implements JwtProvider {
         return JwtToken.builder()
                 .body(accessToken.serialize())
                 .refreshToken(refreshToken.serialize())
-                .expiresAt(Instant.ofEpochSecond((long) accessTtl * 60 * 60))
-                .refreshExpiresAt(Instant.ofEpochSecond((long) refreshTtl * 24 * 60 * 60))
+                .expiresAt(LocalDateTime.now().plusHours(accessTtl))
+                .refreshExpiresAt(LocalDateTime.now().plusDays(refreshTtl))
                 .build();
     }
 

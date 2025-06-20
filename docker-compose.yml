@@ -4,8 +4,14 @@ services:
     env_file:
       - user-management-service/.env
     ports:
-      - "5433:5433"
+      - "5433:5432"
   user-management-service:
+    env_file:
+      - user-management-service/.env
+#    environment:
+#      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+#      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+#      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     build:
       dockerfile: user-management-service/Dockerfile
       context: .

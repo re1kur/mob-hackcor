@@ -2,13 +2,13 @@ package re1kur.ums.jwt;
 
 import lombok.Builder;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Builder
 public record JwtToken(
         String body,
         String refreshToken,
-        Instant expiresAt,
-        Instant refreshExpiresAt
+        LocalDateTime expiresAt,
+        LocalDateTime refreshExpiresAt
 ) {
 }

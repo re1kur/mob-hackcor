@@ -1,4 +1,9 @@
 re1kur\core\dto\UserDto.class
+re1kur\core\exception\UserAlreadyRegisteredException.class
+re1kur\core\exception\UserNotFoundException.class
+re1kur\core\payload\LoginRequest$LoginRequestBuilder.class
+re1kur\core\payload\LoginRequest.class
+re1kur\core\dto\UserDto$UserDtoBuilder.class
+re1kur\core\exception\InvalidCredentialsException.class
 re1kur\core\payload\UserPayload.class
 re1kur\core\payload\UserPayload$UserPayloadBuilder.class
-re1kur\core\dto\UserDto$UserDtoBuilder.class

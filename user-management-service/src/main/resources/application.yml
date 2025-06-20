@@ -1,10 +1,16 @@
 spring:
   application:
     name: user-management-service
+  docker:
+    compose:
+      enabled: true
+      file: ./user-management-service/docker-compose.yml
   datasource:
-    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   liquibase:
-    change-log: file:db/changelog/db.changelog-master.yml
+    change-log: db/changelog/db.changelog-master.yml
   sql:
     init:
       mode: never
