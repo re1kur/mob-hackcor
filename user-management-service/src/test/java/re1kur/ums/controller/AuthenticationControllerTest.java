@@ -41,18 +41,18 @@ public class AuthenticationControllerTest {
         UserPayload payload = UserPayload.builder()
                 .email("email@example.com")
                 .password("password")
+                .firstname("firstname")
+                .lastname("lastname")
                 .build();
         UserDto expectedDto = UserDto.builder()
                 .id("HERE-MUST-BE-UUID-ID")
                 .email("email@example.com")
+                .firstname("firstname")
+                .lastname("lastname")
                 .enabled(false)
                 .build();
 
-        Mockito.when(service.register(UserPayload.builder()
-                .email("email@example.com")
-                .password("password")
-                .build()
-        )).thenReturn(expectedDto);
+        Mockito.when(service.register(Mockito.any(UserPayload.class))).thenReturn(expectedDto);
 
         mvc.perform(MockMvcRequestBuilders
                         .post(URL + "/register")
@@ -69,6 +69,8 @@ public class AuthenticationControllerTest {
         UserPayload payload = UserPayload.builder()
                 .email("email@example.com")
                 .password("password")
+                .firstname("firstname")
+                .lastname("lastname")
                 .build();
 
         Mockito.when(service.register(Mockito.any(UserPayload.class))).thenThrow(UserAlreadyRegisteredException.class);
@@ -87,6 +89,8 @@ public class AuthenticationControllerTest {
         UserPayload invalidPayload = UserPayload.builder()
                 .email("email")
                 .password("password")
+                .firstname("firstname")
+                .lastname("lastname")
                 .build();
 
         mvc.perform(MockMvcRequestBuilders
@@ -103,6 +107,8 @@ public class AuthenticationControllerTest {
         UserPayload invalidPayload = UserPayload.builder()
                 .email("email@example.com")
                 .password("")
+                .firstname("firstname")
+                .lastname("lastname")
                 .build();
 
         mvc.perform(MockMvcRequestBuilders

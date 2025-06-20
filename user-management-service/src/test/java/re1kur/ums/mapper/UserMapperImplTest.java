@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import re1kur.core.dto.UserDto;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.entity.User;
+import re1kur.ums.entity.UserInformation;
 import re1kur.ums.mapper.impl.UserMapperImpl;
 
 import java.util.UUID;
@@ -44,11 +45,20 @@ class UserMapperImplTest {
 
     @Test
     void testRead_MapsUserToUserDto() {
+        UUID uuid = UUID.randomUUID();
+        UserInformation information = UserInformation.builder()
+                .userId(uuid)
+                .firstname("firstname")
+                .lastname("lastname")
+                .build();
+
         User user = User.builder()
-                .id(UUID.randomUUID())
+                .id(uuid)
                 .email("user@example.com")
+                .information(information)
                 .enabled(true)
                 .build();
+
 
         UserDto dto = mapper.read(user);
 

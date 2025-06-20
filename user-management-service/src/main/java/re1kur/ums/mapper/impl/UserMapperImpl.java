@@ -26,6 +26,8 @@ public class UserMapperImpl implements UserMapper {
         return UserDto.builder()
                 .id(user.getId().toString())
                 .email(user.getEmail())
+                .firstname(user.getInformation().getFirstname())
+                .lastname(user.getInformation().getLastname())
                 .enabled(user.getEnabled())
                 .build();
     }

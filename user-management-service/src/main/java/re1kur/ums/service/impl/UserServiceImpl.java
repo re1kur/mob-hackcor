@@ -9,6 +9,7 @@ import re1kur.core.exception.UserAlreadyRegisteredException;
 import re1kur.core.exception.UserNotFoundException;
 import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
+import re1kur.ums.entity.UserInformation;
 import re1kur.ums.jwt.JwtProvider;
 import re1kur.ums.jwt.JwtToken;
 import re1kur.ums.entity.User;
@@ -31,6 +32,12 @@ public class UserServiceImpl implements UserService {
                     "User with email %s already registered.".formatted(payload.email()));
         User mapped = mapper.write(payload);
         User saved = repo.save(mapped);
+        UserInformation info = UserInformation.builder()
+                .firstname(payload.firstname())
+                .lastname(payload.lastname())
+                .user(saved)
+                .build();
+        saved.setInformation(info);
         return mapper.read(saved);
     }
 
