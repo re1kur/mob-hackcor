@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import re1kur.core.exception.InvalidTokenException;
 import re1kur.core.exception.TokenMismatchException;
 import re1kur.core.exception.TokenNotFoundException;
+import re1kur.ums.controller.auth.TokenController;
 import re1kur.ums.jwt.JwtToken;
 import re1kur.ums.service.TokenService;
 

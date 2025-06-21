@@ -26,7 +26,7 @@ public class TaskAttemptMapperImpl implements TaskAttemptMapper {
         return TaskAttemptDto.builder()
                 .id(attempt.getId())
                 .userId(attempt.getUserId().toString())
-                .dailyTaskId(attempt.getTask().getId())
+                .taskId(attempt.getTask().getId())
                 .attemptTime(attempt.getAttemptTime())
                 .textContent(attempt.getTextContent())
                 .fileContentId(attempt.getFileContentId() != null ? attempt.getFileContentId().toString() : null)

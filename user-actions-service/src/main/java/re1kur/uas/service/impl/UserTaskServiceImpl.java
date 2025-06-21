@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import re1kur.core.dto.UserTaskDto;
+import re1kur.core.exception.StatusUpdateFailedException;
 import re1kur.core.exception.UserTaskNotFoundException;
 import re1kur.uas.entity.UserTask;
 import re1kur.uas.entity.UserTaskId;
@@ -22,8 +23,9 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Override
     @Transactional
-    public UserTaskDto updateStatus(String userId, Long taskId, String status) {
-        return mapper.read(repo.updateStatus(UUID.fromString(userId), taskId, status));
+    public void updateStatus(String userId, Long taskId, String status) {
+        Integer i = repo.updateStatus(UUID.fromString(userId), taskId, status);
+        if (i < 0) throw new StatusUpdateFailedException("FAILED TO UPDATE STATUS USER TASK");
     }
 
     @Override

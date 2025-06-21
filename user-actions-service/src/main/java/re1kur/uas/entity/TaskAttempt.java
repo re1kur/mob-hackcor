@@ -23,7 +23,7 @@ public class TaskAttempt {
     private UUID userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "daily_task_id", nullable = false)
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
 

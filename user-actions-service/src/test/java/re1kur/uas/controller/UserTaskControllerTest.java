@@ -8,6 +8,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import re1kur.core.dto.UserTaskDto;
 import re1kur.core.exception.UserTaskNotFoundException;
+import re1kur.uas.controller.task.UserTaskController;
 import re1kur.uas.enums.Status;
 import re1kur.uas.service.UserTaskService;
 
@@ -37,7 +38,6 @@ public class UserTaskControllerTest {
             1L,
             Status.pending.name());
 
-    // ✅ getAll
     @Test
     void getAllTasks_shouldReturnList() throws Exception {
         given(service.getAllByUser(dummyTask.userId())).willReturn(List.of(dummyTask));
@@ -48,7 +48,6 @@ public class UserTaskControllerTest {
                 .andExpect(jsonPath("$[0].taskId").value(1L));
     }
 
-    // ✅ get by ID
     @Test
     void getTaskById_shouldReturnTask() throws Exception {
         given(service.getById(dummyTask.userId(), 1L)).willReturn(dummyTask);
@@ -59,7 +58,6 @@ public class UserTaskControllerTest {
                 .andExpect(jsonPath("$.taskId").value(1L));
     }
 
-    // ❌ get by ID - task not found
     @Test
     void getTaskById_shouldReturn404_whenNotFound() throws Exception {
         given(service.getById(dummyTask.userId(), 99L)).willThrow(new UserTaskNotFoundException("Task not found"));
@@ -70,28 +68,18 @@ public class UserTaskControllerTest {
                 .andExpect(content().string("Task not found"));
     }
 
-    // ✅ updateStatus
     @Test
     void updateStatus_shouldUpdateAndReturnTask() throws Exception {
-        given(service.updateStatus(dummyTask.userId(), 1L, Status.confirmed.name())).willReturn(
-                new UserTaskDto(
-                        UUID.randomUUID().toString(),
-                        1L,
-                        1L,
-                        Status.confirmed.name()));
-
         mockMvc.perform(put("/api/user-task/1/update-status")
                         .param("userId", dummyTask.userId())
                         .param("status", "confirmed"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("confirmed"));
+                .andExpect(status().isOk());
     }
 
-    // ❌ updateStatus - not found
     @Test
     void updateStatus_shouldReturn404_whenNotFound() throws Exception {
-        given(service.updateStatus(dummyTask.userId(), 999L, Status.confirmed.name()))
-                .willThrow(new UserTaskNotFoundException("Task not found"));
+        doThrow(new UserTaskNotFoundException("Task not found"))
+                .when(service).updateStatus(dummyTask.userId(), 999L, Status.confirmed.name());
 
         mockMvc.perform(put("/api/user-task/999/update-status")
                         .param("userId", dummyTask.userId())
@@ -100,7 +88,6 @@ public class UserTaskControllerTest {
                 .andExpect(content().string("Task not found"));
     }
 
-    // ✅ delete
     @Test
     void deleteTask_shouldSucceed() throws Exception {
         doNothing().when(service).delete(dummyTask.userId(), 1L);
@@ -110,7 +97,6 @@ public class UserTaskControllerTest {
                 .andExpect(status().isOk());
     }
 
-    // ❌ delete - not found
     @Test
     void deleteTask_shouldReturn404_whenNotFound() throws Exception {
         doThrow(new UserTaskNotFoundException("Task not found")).when(service).delete(dummyTask.userId(), 1L);

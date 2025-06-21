@@ -1,4 +1,4 @@
-package re1kur.ums.controller;
+package re1kur.ums.controller.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

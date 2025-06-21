@@ -27,7 +27,7 @@ public interface UserTaskRepository extends JpaRepository<UserTask, UserTaskId> 
         SET u.status = :status
         WHERE u.id.userId = :userId AND u.id.taskId = :taskId
     """)
-    UserTask updateStatus(@Param("userId") UUID userId,
+    Integer updateStatus(@Param("userId") UUID userId,
                           @Param("taskId") Long taskId,
                           @Param("status") String status);
 }

@@ -2,17 +2,17 @@ package re1kur.uas.service;
 
 import org.springframework.data.domain.Pageable;
 import re1kur.core.dto.TaskDto;
-import re1kur.core.payload.DailyTaskPayload;
-import re1kur.core.payload.DailyTaskUpdatePayload;
+import re1kur.core.payload.TaskPayload;
+import re1kur.core.payload.TaskUpdatePayload;
 
 import java.util.List;
 
 public interface TaskService {
-    TaskDto create(DailyTaskPayload payload);
+    TaskDto create(TaskPayload payload);
 
     TaskDto getById(Long id);
 
-    TaskDto update(DailyTaskUpdatePayload payload);
+    TaskDto update(TaskUpdatePayload payload);
 
     void delete(Long id);
 

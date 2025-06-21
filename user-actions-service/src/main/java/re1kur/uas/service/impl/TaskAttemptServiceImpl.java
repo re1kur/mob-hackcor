@@ -30,7 +30,7 @@ public class TaskAttemptServiceImpl implements TaskAttemptService {
 
     @Override
     public TaskAttemptDto create(TaskAttemptPayload payload) {
-        Long id = payload.dailyTaskId();
+        Long id = payload.taskId();
         Task task = dailyRepo.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException("DailyTask %s not found.".formatted(id)));
 

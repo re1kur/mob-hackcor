@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/parser-service/pom.xml" />
         <option value="$PROJECT_DIR$/user-actions-service/pom.xml" />
+        <option value="$PROJECT_DIR$/file-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

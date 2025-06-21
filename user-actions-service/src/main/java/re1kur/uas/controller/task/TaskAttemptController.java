@@ -1,4 +1,4 @@
-package re1kur.uas.controller;
+package re1kur.uas.controller.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

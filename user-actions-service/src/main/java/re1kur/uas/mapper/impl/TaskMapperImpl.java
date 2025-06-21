@@ -2,7 +2,8 @@ package re1kur.uas.mapper.impl;
 
 import org.springframework.stereotype.Component;
 import re1kur.core.dto.TaskDto;
-import re1kur.core.payload.DailyTaskPayload;
+import re1kur.core.payload.TaskPayload;
+import re1kur.core.payload.TaskUpdatePayload;
 import re1kur.uas.entity.Task;
 import re1kur.uas.mapper.TaskMapper;
 
@@ -10,7 +11,7 @@ import re1kur.uas.mapper.TaskMapper;
 public class TaskMapperImpl implements TaskMapper {
 
     @Override
-    public Task write(DailyTaskPayload payload) {
+    public Task write(TaskPayload payload) {
         return Task.builder()
                 .title(payload.title())
                 .description(payload.description())
@@ -29,12 +30,12 @@ public class TaskMapperImpl implements TaskMapper {
     }
 
     @Override
-    public Task update(Task found) {
+    public Task update(Task found, TaskUpdatePayload payload) {
         return Task.builder()
                 .id(found.getId())
-                .title(found.getTitle())
-                .description(found.getDescription())
-                .reward(found.getReward())
+                .title(payload.title())
+                .description(payload.description())
+                .reward(payload.reward())
                 .build();
     }
 }

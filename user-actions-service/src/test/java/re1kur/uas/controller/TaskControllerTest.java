@@ -16,8 +16,9 @@ import org.springframework.util.MultiValueMap;
 import re1kur.core.dto.TaskDto;
 import re1kur.core.exception.TaskAlreadyExistException;
 import re1kur.core.exception.TaskNotFoundException;
-import re1kur.core.payload.DailyTaskPayload;
-import re1kur.core.payload.DailyTaskUpdatePayload;
+import re1kur.core.payload.TaskPayload;
+import re1kur.core.payload.TaskUpdatePayload;
+import re1kur.uas.controller.task.TaskController;
 import re1kur.uas.service.TaskService;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class TaskControllerTest {
 
     @Test
     void testCreate__ValidTask__DoesNotThrowException() throws Exception {
-        DailyTaskPayload payload = DailyTaskPayload.builder()
+        TaskPayload payload = TaskPayload.builder()
                 .title("title")
                 .description("description")
                 .reward(5)
@@ -74,7 +75,7 @@ public class TaskControllerTest {
 
     @Test
     void testCreate__TaskWithInvalidTitle__ThrowsMethodArgumentNotValidException() throws Exception {
-        DailyTaskPayload payload = DailyTaskPayload.builder()
+        TaskPayload payload = TaskPayload.builder()
                 .title("")
                 .description("description")
                 .reward(5)
@@ -91,7 +92,7 @@ public class TaskControllerTest {
 
     @Test
     void testCreate__TaskWithInvalidDescription__ThrowsMethodArgumentNotValidException() throws Exception {
-        DailyTaskPayload payload = DailyTaskPayload.builder()
+        TaskPayload payload = TaskPayload.builder()
                 .title("title")
                 .description("")
                 .reward(5)
@@ -108,7 +109,7 @@ public class TaskControllerTest {
 
     @Test
     void testCreate__TaskAlreadyExists__ThrowsTaskAlreadyExistException() throws Exception {
-        DailyTaskPayload payload = DailyTaskPayload.builder()
+        TaskPayload payload = TaskPayload.builder()
                 .title("title")
                 .description("description")
                 .reward(5)
@@ -167,7 +168,7 @@ public class TaskControllerTest {
 
     @Test
     void testUpdate__ValidTask__DoesNotThrowException() throws Exception {
-        DailyTaskUpdatePayload payload = DailyTaskUpdatePayload.builder()
+        TaskUpdatePayload payload = TaskUpdatePayload.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -194,7 +195,7 @@ public class TaskControllerTest {
 
     @Test
     void testUpdate__NotExistingTask__ThrowTaskNotFoundException() throws Exception {
-        DailyTaskUpdatePayload payload = DailyTaskUpdatePayload.builder()
+        TaskUpdatePayload payload = TaskUpdatePayload.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -214,7 +215,7 @@ public class TaskControllerTest {
 
     @Test
     void testUpdate__TaskWithThisTitleAlreadyExist__TaskTaskAlreadyExistException() throws Exception {
-        DailyTaskUpdatePayload payload = DailyTaskUpdatePayload.builder()
+        TaskUpdatePayload payload = TaskUpdatePayload.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")

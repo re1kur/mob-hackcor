@@ -3,7 +3,7 @@
 -- changeset re1kur:1
 CREATE TABLE IF NOT EXISTS users
 (
-    id       uuid PRIMARY KEY DEFAULT gen_random_uuid (),
+    id       uuid PRIMARY KEY             DEFAULT gen_random_uuid(),
     email    VARCHAR(256) UNIQUE NOT NULL,
     password VARCHAR(256)        NOT NULL,
     enabled  BOOLEAN             NOT NULL DEFAULT FALSE
@@ -36,5 +36,11 @@ CREATE TABLE IF NOT EXISTS user_information
     user_id   uuid primary key,
     firstname VARCHAR(64) NOT NULL,
     lastname  VARCHAR(64) NOT NULL,
+    level     VARCHAR(64) CHECK (
+        level IN ('NEWCOMER',
+                  'OBSERVER',
+                  'ACTIVIST',
+                  'TRANSPARENCY AGENT')) DEFAULT 'NEWCOMER',
+    balance   INT                        DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

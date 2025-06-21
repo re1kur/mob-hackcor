@@ -17,6 +17,20 @@ services:
       - user-management-service/.env
     ports:
       - "6379:6379"
+  fs-postgres:
+    image: postgres:17
+    env_file:
+      - file-service/.env
+    ports:
+      - '5435:5432'
+  fs-minio:
+    image: quay.io/minio/minio:latest
+    env_file:
+      - file-service/.env
+    command: server /data --console-address ":9001"
+    ports:
+      - '9000:9000'
+      - '9001:9001'
 
   ums-service:
     image: re1kur/ums:latest
@@ -41,3 +55,15 @@ services:
       context: .
     ports:
       - "8082:8082"
+  fs-service:
+    image: re1kur/fs:latest
+    depends_on:
+      - fs-postgres
+      - fs-minio
+    env_file:
+      - file-service/.env
+    build:
+      dockerfile: file-service/Dockerfile
+      context: .
+    ports:
+      - "8083:8083"

@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import re1kur.core.dto.TaskDto;
 import re1kur.core.exception.TaskAlreadyExistException;
 import re1kur.core.exception.TaskNotFoundException;
-import re1kur.core.payload.DailyTaskPayload;
-import re1kur.core.payload.DailyTaskUpdatePayload;
+import re1kur.core.payload.TaskPayload;
+import re1kur.core.payload.TaskUpdatePayload;
 import re1kur.uas.entity.Task;
 import re1kur.uas.mapper.impl.TaskMapperImpl;
 import re1kur.uas.repository.TaskRepository;
@@ -32,7 +32,7 @@ class TaskServiceTest {
 
     @Test
     void testCreate__ValidTask__DoesNotThrowException() {
-        DailyTaskPayload payload = DailyTaskPayload.builder()
+        TaskPayload payload = TaskPayload.builder()
                 .title("title")
                 .description("description")
                 .reward(5)
@@ -72,7 +72,7 @@ class TaskServiceTest {
 
     @Test
     void testCreate__TaskAlreadyExist__ThrowTaskAlreadyExistException() {
-        DailyTaskPayload payload = DailyTaskPayload.builder()
+        TaskPayload payload = TaskPayload.builder()
                 .title("title")
                 .description("description")
                 .reward(5)
@@ -133,7 +133,7 @@ class TaskServiceTest {
 
     @Test
     void testUpdate__ValidTask__DoesNotThrowException() {
-        DailyTaskUpdatePayload payload = DailyTaskUpdatePayload.builder()
+        TaskUpdatePayload payload = TaskUpdatePayload.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -159,7 +159,7 @@ class TaskServiceTest {
                 .build();
 
         Mockito.when(repo.findById(1L)).thenReturn(Optional.of(found));
-        Mockito.when(mapper.update(found)).thenReturn(updated);
+        Mockito.when(mapper.update(found, payload)).thenReturn(updated);
         Mockito.when(repo.save(updated)).thenReturn(updated);
         Mockito.when(mapper.read(updated)).thenReturn(TaskDto.builder()
                 .id(1L)
@@ -178,7 +178,7 @@ class TaskServiceTest {
 
     @Test
     void testUpdate__TaskWithThisTitleAlreadyExist__ThrowTaskAlreadyExistException() {
-        DailyTaskUpdatePayload payload = DailyTaskUpdatePayload.builder()
+        TaskUpdatePayload payload = TaskUpdatePayload.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -197,20 +197,20 @@ class TaskServiceTest {
                 .reward(10)
                 .build();
         Mockito.when(repo.findById(1L)).thenReturn(Optional.of(found));
-        Mockito.when(mapper.update(found)).thenReturn(updated);
+        Mockito.when(mapper.update(found, payload)).thenReturn(updated);
         Mockito.when(repo.save(Mockito.any(Task.class))).thenThrow(TaskAlreadyExistException.class);
 
         Assertions.assertThrows(TaskAlreadyExistException.class, () -> service.update(payload));
 
         Mockito.verify(repo, Mockito.times(1)).findById(1L);
         Mockito.verify(repo, Mockito.times(1)).save(Mockito.any(Task.class));
-        Mockito.verify(mapper, Mockito.times(1)).update(found);
+        Mockito.verify(mapper, Mockito.times(1)).update(found, payload);
         Mockito.verifyNoMoreInteractions(mapper);
     }
 
     @Test
     void testUpdate__NotExistingTask__ThrowTaskNotFoundException() {
-        DailyTaskUpdatePayload payload = DailyTaskUpdatePayload.builder()
+        TaskUpdatePayload payload = TaskUpdatePayload.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")

@@ -1,4 +1,4 @@
-package re1kur.uas.controller;
+package re1kur.uas.controller.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +34,8 @@ public class UserTaskController {
             @PathVariable Long taskId,
             @RequestParam Status status
     ) {
-        UserTaskDto body = service.updateStatus(userId, taskId, status.name());
-        return ResponseEntity.ok().body(body);
+        service.updateStatus(userId, taskId, status.name());
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{taskId}/delete")

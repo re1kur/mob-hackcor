@@ -22,6 +22,10 @@ public class UserInformation {
 
     private String lastname;
 
+    private Integer balance;
+
+    private String level;
+
     @OneToOne
     @MapsId
     @JoinColumn(name = "user_id")

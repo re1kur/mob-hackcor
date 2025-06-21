@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record DailyTaskPayload(
+public record TaskPayload(
         @NotBlank(message = "Title must be not empty.")
         @Size(min = 4, max = 64)
         String title,

@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record TaskAttemptPayload(
         String userId,
-        Long dailyTaskId,
+        Long taskId,
         String textContent,
         String fileContentId
 ) {

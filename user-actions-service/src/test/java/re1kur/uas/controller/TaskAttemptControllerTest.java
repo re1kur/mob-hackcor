@@ -15,6 +15,7 @@ import re1kur.core.dto.TaskAttemptDto;
 import re1kur.core.exception.TaskAttemptNotFoundException;
 import re1kur.core.payload.TaskAttemptPayload;
 import re1kur.core.payload.TaskAttemptUpdatePayload;
+import re1kur.uas.controller.task.TaskAttemptController;
 import re1kur.uas.service.TaskAttemptService;
 
 import java.time.LocalDateTime;
@@ -54,7 +55,7 @@ public class TaskAttemptControllerTest {
     void testCreate_ValidPayload_ReturnsCreated() throws Exception {
         TaskAttemptPayload payload = TaskAttemptPayload.builder()
                 .userId(userId.toString())
-                .dailyTaskId(1L)
+                .taskId(1L)
                 .fileContentId(fileId.toString())
                 .textContent("some text")
                 .build();
@@ -62,7 +63,7 @@ public class TaskAttemptControllerTest {
         TaskAttemptDto response = TaskAttemptDto.builder()
                 .id(1L)
                 .userId(userId.toString())
-                .dailyTaskId(1L)
+                .taskId(1L)
                 .fileContentId(fileId.toString())
                 .textContent("some text")
                 .attemptTime(now)
@@ -85,7 +86,7 @@ public class TaskAttemptControllerTest {
         TaskAttemptDto dto = TaskAttemptDto.builder()
                 .id(1L)
                 .userId(userId.toString())
-                .dailyTaskId(1L)
+                .taskId(1L)
                 .fileContentId(fileId.toString())
                 .textContent("get attempt")
                 .attemptTime(now)
@@ -117,7 +118,7 @@ public class TaskAttemptControllerTest {
         TaskAttemptDto updated = TaskAttemptDto.builder()
                 .id(1L)
                 .userId(userId.toString())
-                .dailyTaskId(1L)
+                .taskId(1L)
                 .fileContentId(fileId.toString())
                 .textContent("updated")
                 .moderatorId(moderatorId.toString())

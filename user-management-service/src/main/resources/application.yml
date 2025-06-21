@@ -14,9 +14,6 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   liquibase:
     change-log: db/changelog/db.changelog-master.yml
-  sql:
-    init:
-      mode: never
   jpa:
     open-in-view: false
 

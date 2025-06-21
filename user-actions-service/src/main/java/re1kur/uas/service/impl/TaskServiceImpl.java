@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import re1kur.core.dto.TaskDto;
 import re1kur.core.exception.TaskAlreadyExistException;
 import re1kur.core.exception.TaskNotFoundException;
-import re1kur.core.payload.DailyTaskPayload;
-import re1kur.core.payload.DailyTaskUpdatePayload;
+import re1kur.core.payload.TaskPayload;
+import re1kur.core.payload.TaskUpdatePayload;
 import re1kur.uas.entity.Task;
 import re1kur.uas.mapper.TaskMapper;
 import re1kur.uas.repository.TaskRepository;
@@ -22,7 +22,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper mapper;
 
     @Override
-    public TaskDto create(DailyTaskPayload payload) {
+    public TaskDto create(TaskPayload payload) {
         if (repo.existsByTitle(payload.title()))
             throw new TaskAlreadyExistException("Task %s already exist.".formatted(payload.title()));
         Task mapped = mapper.write(payload);
@@ -38,11 +38,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto update(DailyTaskUpdatePayload payload) {
+    public TaskDto update(TaskUpdatePayload payload) {
         Long id = payload.id();
         Task task = repo.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException("Task with id %s not found.".formatted(id)));
-        Task updated = mapper.update(task);
+        Task updated = mapper.update(task, payload);
         Task saved = repo.save(updated);
         return mapper.read(saved);
     }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record TaskAttemptDto(
         Long id,
         String userId,
-        Long dailyTaskId,
+        Long taskId,
         LocalDateTime attemptTime,
         String textContent,
         String fileContentId,
