@@ -20,6 +20,9 @@ services:
 
   ums-service:
     image: re1kur/ums:latest
+    depends_on:
+      - ums-postgres
+      - ums-redis
     env_file:
       - user-management-service/.env
     build:
@@ -29,6 +32,8 @@ services:
       - "8081:8081"
   uas-service:
     image: re1kur/uas:latest
+    depends_on:
+      - uas-postgres
     env_file:
       - user-actions-service/.env
     build:

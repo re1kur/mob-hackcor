@@ -3,13 +3,13 @@ package re1kur.uas.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "daily_tasks")
-public class DailyTask {
+@Entity
+@Table(name = "tasks")
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

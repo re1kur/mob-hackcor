@@ -7,28 +7,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import re1kur.core.dto.DailyTaskDto;
+import re1kur.core.dto.TaskDto;
 import re1kur.core.exception.TaskAlreadyExistException;
 import re1kur.core.exception.TaskNotFoundException;
 import re1kur.core.payload.DailyTaskPayload;
 import re1kur.core.payload.DailyTaskUpdatePayload;
-import re1kur.uas.entity.DailyTask;
-import re1kur.uas.mapper.impl.DailyTaskMapperImpl;
-import re1kur.uas.repository.DailyTaskRepository;
-import re1kur.uas.service.impl.DailyTaskServiceImpl;
+import re1kur.uas.entity.Task;
+import re1kur.uas.mapper.impl.TaskMapperImpl;
+import re1kur.uas.repository.TaskRepository;
+import re1kur.uas.service.impl.TaskServiceImpl;
 
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-class DailyTaskServiceTest {
+class TaskServiceTest {
     @InjectMocks
-    private DailyTaskServiceImpl service;
+    private TaskServiceImpl service;
 
     @Mock
-    private DailyTaskRepository repo;
+    private TaskRepository repo;
 
     @Mock
-    private DailyTaskMapperImpl mapper;
+    private TaskMapperImpl mapper;
 
     @Test
     void testCreate__ValidTask__DoesNotThrowException() {
@@ -37,19 +37,19 @@ class DailyTaskServiceTest {
                 .description("description")
                 .reward(5)
                 .build();
-        DailyTask mapped = DailyTask.builder()
+        Task mapped = Task.builder()
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
-        DailyTask saved = DailyTask.builder()
+        Task saved = Task.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
 
-        DailyTaskDto expected = DailyTaskDto.builder()
+        TaskDto expected = TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
@@ -61,7 +61,7 @@ class DailyTaskServiceTest {
         Mockito.when(repo.save(mapped)).thenReturn(saved);
         Mockito.when(mapper.read(saved)).thenReturn(expected);
 
-        DailyTaskDto result = Assertions.assertDoesNotThrow(() -> service.create(payload));
+        TaskDto result = Assertions.assertDoesNotThrow(() -> service.create(payload));
         Assertions.assertEquals(expected, result);
 
         Mockito.verify(repo, Mockito.times(1)).existsByTitle("title");
@@ -90,13 +90,13 @@ class DailyTaskServiceTest {
     @Test
     void testGet__ValidTask__DoesNotThrowException() {
         long id = 1L;
-        DailyTask found = DailyTask.builder()
+        Task found = Task.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
-        DailyTaskDto expected = DailyTaskDto.builder()
+        TaskDto expected = TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
@@ -104,14 +104,14 @@ class DailyTaskServiceTest {
                 .build();
 
         Mockito.when(repo.findById(1L)).thenReturn(Optional.of(found));
-        Mockito.when(mapper.read(found)).thenReturn(DailyTaskDto.builder()
+        Mockito.when(mapper.read(found)).thenReturn(TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build());
 
-        DailyTaskDto result = Assertions.assertDoesNotThrow(() -> service.getById(id));
+        TaskDto result = Assertions.assertDoesNotThrow(() -> service.getById(id));
         Assertions.assertEquals(expected, result);
 
         Mockito.verify(repo, Mockito.times(1)).findById(1L);
@@ -139,19 +139,19 @@ class DailyTaskServiceTest {
                 .description("descriptionUpdate")
                 .reward(10)
                 .build();
-        DailyTask found = DailyTask.builder()
+        Task found = Task.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
-        DailyTask updated = DailyTask.builder()
+        Task updated = Task.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
                 .reward(10)
                 .build();
-        DailyTaskDto expected = DailyTaskDto.builder()
+        TaskDto expected = TaskDto.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -161,14 +161,14 @@ class DailyTaskServiceTest {
         Mockito.when(repo.findById(1L)).thenReturn(Optional.of(found));
         Mockito.when(mapper.update(found)).thenReturn(updated);
         Mockito.when(repo.save(updated)).thenReturn(updated);
-        Mockito.when(mapper.read(updated)).thenReturn(DailyTaskDto.builder()
+        Mockito.when(mapper.read(updated)).thenReturn(TaskDto.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
                 .reward(10)
                 .build());
 
-        DailyTaskDto result = Assertions.assertDoesNotThrow(() -> service.update(payload));
+        TaskDto result = Assertions.assertDoesNotThrow(() -> service.update(payload));
         Assertions.assertEquals(expected, result);
 
         Mockito.verify(repo, Mockito.times(1)).findById(1L);
@@ -184,13 +184,13 @@ class DailyTaskServiceTest {
                 .description("descriptionUpdate")
                 .reward(10)
                 .build();
-        DailyTask found = DailyTask.builder()
+        Task found = Task.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
-        DailyTask updated = DailyTask.builder()
+        Task updated = Task.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -198,12 +198,12 @@ class DailyTaskServiceTest {
                 .build();
         Mockito.when(repo.findById(1L)).thenReturn(Optional.of(found));
         Mockito.when(mapper.update(found)).thenReturn(updated);
-        Mockito.when(repo.save(Mockito.any(DailyTask.class))).thenThrow(TaskAlreadyExistException.class);
+        Mockito.when(repo.save(Mockito.any(Task.class))).thenThrow(TaskAlreadyExistException.class);
 
         Assertions.assertThrows(TaskAlreadyExistException.class, () -> service.update(payload));
 
         Mockito.verify(repo, Mockito.times(1)).findById(1L);
-        Mockito.verify(repo, Mockito.times(1)).save(Mockito.any(DailyTask.class));
+        Mockito.verify(repo, Mockito.times(1)).save(Mockito.any(Task.class));
         Mockito.verify(mapper, Mockito.times(1)).update(found);
         Mockito.verifyNoMoreInteractions(mapper);
     }

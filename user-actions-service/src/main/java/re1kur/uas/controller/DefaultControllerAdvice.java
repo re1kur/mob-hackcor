@@ -6,7 +6,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import re1kur.core.exception.TaskAlreadyExistException;
+import re1kur.core.exception.TaskAttemptNotFoundException;
 import re1kur.core.exception.TaskNotFoundException;
+import re1kur.core.exception.UserTaskNotFoundException;
 
 @RestControllerAdvice
 public class DefaultControllerAdvice {
@@ -23,6 +25,16 @@ public class DefaultControllerAdvice {
 
     @ExceptionHandler(exception = TaskNotFoundException.class)
     public ResponseEntity<String> handleTaskNotFoundException(TaskNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = TaskAttemptNotFoundException.class)
+    public ResponseEntity<String> handleTaskAttemptNotFoundException(TaskAttemptNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = UserTaskNotFoundException.class)
+    public ResponseEntity<String> handleUserDailyTaskNotFoundException(UserTaskNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

@@ -6,6 +6,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import re1kur.ums.jwt.JwtProvider;
 import re1kur.ums.jwt.JwtToken;
 import re1kur.ums.repository.redis.TokenRepository;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -31,6 +33,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -41,6 +44,9 @@ public class JwtProviderImpl implements JwtProvider {
 
     @Value("${custom.jwt.publicKeyPath}")
     private String publicKeyPath;
+
+    @Value("${custom.jwt.kidPath}")
+    private String kidPath;
 
     @Value("${custom.jwt.keySize}")
     private int keySize;
@@ -67,16 +73,16 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     public JwtToken generate(Credentials cred) throws JOSEException {
-        if (!Files.exists(Paths.get(publicKeyPath))) {
-            generateKeyPair();
-        }
+        checkKeys();
 
         RSAPrivateKey privateKey = readPrivateKeyFromFile(privateKeyPath);
         RSAPublicKey publicKey = readPublicKeyFromFile(publicKeyPath);
+        String kid = readKidFromFile(kidPath);
         RSASSASigner signer = new RSASSASigner(privateKey);
 
         JWSHeader accessHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
+                .keyID(kid)
                 .build();
 
         JWTClaimsSet accessPayload = new JWTClaimsSet.Builder()
@@ -94,6 +100,7 @@ public class JwtProviderImpl implements JwtProvider {
 
         JWSHeader refreshHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT)
+                .keyID(kid)
                 .build();
 
         JWTClaimsSet refreshPayload = new JWTClaimsSet.Builder()
@@ -126,8 +133,24 @@ public class JwtProviderImpl implements JwtProvider {
         return build;
     }
 
+    @PostConstruct
+    private void checkKeys() {
+        if (!Files.exists(Paths.get(publicKeyPath))) {
+            generateKeyPair();
+        }
+    }
+
+    @SneakyThrows
+    @Override
+    public String readKidFromFile(String kidPath) {
+        byte[] bytes = Files.readAllBytes(Paths.get(kidPath));
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+
     @SneakyThrows
     private void generateKeyPair() {
+        String kid = UUID.randomUUID().toString();
         KeyPairGenerator pairGenerator = KeyPairGenerator.getInstance("RSA");
         pairGenerator.initialize(keySize);
         KeyPair keyPair = pairGenerator.generateKeyPair();
@@ -135,6 +158,7 @@ public class JwtProviderImpl implements JwtProvider {
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         Files.write(Paths.get(publicKeyPath), publicKey.getEncoded(), StandardOpenOption.CREATE_NEW);
         Files.write(Paths.get(privateKeyPath), privateKey.getEncoded(), StandardOpenOption.CREATE_NEW);
+        Files.write(Paths.get(kidPath), kid.getBytes(), StandardOpenOption.CREATE_NEW);
     }
 
     @SneakyThrows
@@ -145,7 +169,8 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     @SneakyThrows
-    private RSAPublicKey readPublicKeyFromFile(String path) {
+    @Override
+    public RSAPublicKey readPublicKeyFromFile(String path) {
         byte[] keyContent = Files.readAllBytes(Paths.get(path));
         return (RSAPublicKey) KeyFactory.getInstance("RSA")
                 .generatePublic(new X509EncodedKeySpec(keyContent));

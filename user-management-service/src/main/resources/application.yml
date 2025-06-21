@@ -30,3 +30,4 @@ custom:
     keySize: 2048
     privateKeyPath: /tmp/private.key
     publicKeyPath: /tmp/public.key
+    kidPath: /tmp/kid.txt

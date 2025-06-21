@@ -13,12 +13,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.MultiValueMap;
-import re1kur.core.dto.DailyTaskDto;
+import re1kur.core.dto.TaskDto;
 import re1kur.core.exception.TaskAlreadyExistException;
 import re1kur.core.exception.TaskNotFoundException;
 import re1kur.core.payload.DailyTaskPayload;
 import re1kur.core.payload.DailyTaskUpdatePayload;
-import re1kur.uas.service.DailyTaskService;
+import re1kur.uas.service.TaskService;
 
 import java.util.List;
 import java.util.Map;
@@ -26,9 +26,9 @@ import java.util.Map;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = DailyTaskController.class)
+@WebMvcTest(controllers = TaskController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class DailyTaskControllerTest {
+public class TaskControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -36,9 +36,9 @@ public class DailyTaskControllerTest {
     private ObjectMapper mapper;
 
     @MockitoBean
-    private DailyTaskService service;
+    private TaskService service;
 
-    private static final String URL = "/api/daily-task";
+    private static final String URL = "/api/task";
 
     @Test
     void testCreate__ValidTask__DoesNotThrowException() throws Exception {
@@ -48,14 +48,14 @@ public class DailyTaskControllerTest {
                 .reward(5)
                 .build();
 
-        DailyTaskDto expected = DailyTaskDto.builder()
+        TaskDto expected = TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
 
-        Mockito.when(service.create(payload)).thenReturn(DailyTaskDto.builder()
+        Mockito.when(service.create(payload)).thenReturn(TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
@@ -128,14 +128,14 @@ public class DailyTaskControllerTest {
     @Test
     void testGet__ValidTask__DoesNotThrowException() throws Exception {
         long id = 1L;
-        DailyTaskDto expected = DailyTaskDto.builder()
+        TaskDto expected = TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
 
-        Mockito.when(service.getById(1L)).thenReturn(DailyTaskDto.builder()
+        Mockito.when(service.getById(1L)).thenReturn(TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
@@ -173,7 +173,7 @@ public class DailyTaskControllerTest {
                 .description("descriptionUpdate")
                 .reward(10)
                 .build();
-        DailyTaskDto expected = DailyTaskDto.builder()
+        TaskDto expected = TaskDto.builder()
                 .id(1L)
                 .title("titleUpdate")
                 .description("descriptionUpdate")
@@ -264,19 +264,19 @@ public class DailyTaskControllerTest {
     void getList__DoesNotThrowException() throws Exception {
         int pageNumber = 1;
         int pageSize = 10;
-        DailyTaskDto build1 = DailyTaskDto.builder()
+        TaskDto build1 = TaskDto.builder()
                 .id(1L)
                 .title("title")
                 .description("description")
                 .reward(5)
                 .build();
-        DailyTaskDto build2 = DailyTaskDto.builder()
+        TaskDto build2 = TaskDto.builder()
                 .id(2L)
                 .title("title2")
                 .description("description2")
                 .reward(52)
                 .build();
-        List<DailyTaskDto> expected = List.of(build1, build2);
+        List<TaskDto> expected = List.of(build1, build2);
         Pageable pageable = PageRequest.of(1, 10);
 
         Mockito.when(service.getDailyTasks(pageable)).thenReturn(List.of(build1, build2));

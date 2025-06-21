@@ -8,6 +8,7 @@ import re1kur.ums.jwt.JwtToken;
 import re1kur.ums.service.TokenService;
 
 import java.text.ParseException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +20,10 @@ public class TokenController {
     public ResponseEntity<JwtToken> refresh(@RequestParam String refreshToken) throws ParseException {
         JwtToken token = service.refreshToken(refreshToken);
         return ResponseEntity.status(HttpStatus.FOUND).body(token);
+    }
+
+    @GetMapping("jwks")
+    public Map<String, Object> getJwks() throws Exception {
+        return service.getPublicKey();
     }
 }
