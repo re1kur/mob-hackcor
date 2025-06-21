@@ -1,19 +1,25 @@
 services:
-  ums-database:
+  ums-postgres:
     image: postgres:17
     env_file:
       - user-management-service/.env
     ports:
       - "5433:5432"
-
-  ums-redis-database:
+  uas-postgres:
+    image: postgres:17
+    env_file:
+      - user-actions-service/.env
+    ports:
+      - "5434:5432"
+  ums-redis:
     image: redis:latest
     env_file:
       - user-management-service/.env
     ports:
       - "6379:6379"
 
-  user-management-service:
+  ums-service:
+    image: re1kur/ums:latest
     env_file:
       - user-management-service/.env
     build:
@@ -21,3 +27,12 @@ services:
       context: .
     ports:
       - "8081:8081"
+  uas-service:
+    image: re1kur/uas:latest
+    env_file:
+      - user-actions-service/.env
+    build:
+      dockerfile: user-actions-service/Dockerfile
+      context: .
+    ports:
+      - "8082:8082"

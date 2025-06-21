@@ -7,7 +7,14 @@
         <option value="$PROJECT_DIR$/user-management-service/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/core/pom.xml" />
+        <option value="$PROJECT_DIR$/parser-service/pom.xml" />
+        <option value="$PROJECT_DIR$/user-actions-service/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/parser-service/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="23" project-jdk-type="JavaSDK">
