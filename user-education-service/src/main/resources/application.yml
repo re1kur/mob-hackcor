@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: user-education-service
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://ums-service:8081/api/token/jwks
+
+
+server:
+  port: 8084
+
+custom:
+  points:
+    lecture: 2
+    quiz: 20

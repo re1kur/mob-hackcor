@@ -18,7 +18,7 @@ import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.controller.auth.AuthenticationController;
 import re1kur.ums.jwt.JwtToken;
-import re1kur.ums.service.UserService;
+import re1kur.ums.service.AuthService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +35,7 @@ public class AuthenticationControllerTest {
     ObjectMapper mapper;
 
     @MockitoBean
-    UserService service;
+    AuthService service;
 
     @Test
     void testRegister__ValidUser__DoesNotThrowException() throws Exception {

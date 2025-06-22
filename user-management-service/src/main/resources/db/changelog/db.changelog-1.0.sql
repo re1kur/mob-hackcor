@@ -33,14 +33,12 @@ CREATE INDEX idx_users_roles_role_id ON users_roles (role_id);
 --changeset re1kur:5
 CREATE TABLE IF NOT EXISTS user_information
 (
-    user_id   uuid primary key,
+    user_id   UUID PRIMARY KEY,
     firstname VARCHAR(64) NOT NULL,
     lastname  VARCHAR(64) NOT NULL,
     level     VARCHAR(64) CHECK (
-        level IN ('NEWCOMER',
-                  'OBSERVER',
-                  'ACTIVIST',
-                  'TRANSPARENCY AGENT')) DEFAULT 'NEWCOMER',
-    balance   INT                        DEFAULT 0,
+        level IN ('NEWCOMER', 'OBSERVER', 'ACTIVIST', 'TRANSPARENCY AGENT')
+        )         DEFAULT 'NEWCOMER',
+    rating   INT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

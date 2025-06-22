@@ -13,6 +13,7 @@
         <module>user-actions-service</module>
         <module>user-management-service</module>
         <module>file-service</module>
+        <module>user-education-service</module>
     </modules>
 
     <properties>

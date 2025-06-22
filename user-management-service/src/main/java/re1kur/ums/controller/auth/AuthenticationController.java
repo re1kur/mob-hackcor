@@ -9,13 +9,13 @@ import re1kur.core.dto.UserDto;
 import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.jwt.JwtToken;
-import re1kur.ums.service.UserService;
+import re1kur.ums.service.AuthService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth/")
 public class AuthenticationController {
-    private final UserService service;
+    private final AuthService service;
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody @Valid UserPayload payload) {

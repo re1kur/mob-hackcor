@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "user_information")
 public class UserInformation {
+
     @Id
     private UUID userId;
 
@@ -22,7 +23,7 @@ public class UserInformation {
 
     private String lastname;
 
-    private Integer balance;
+    private Integer rating;
 
     private String level;
 

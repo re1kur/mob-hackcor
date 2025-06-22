@@ -1,6 +1,8 @@
 spring:
   application:
     name: user-actions-service
+  jpa:
+    open-in-view: false
   liquibase:
     change-log: db/changelog/db.changelog-master.yml
   datasource:
@@ -12,7 +14,10 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://ums-service:8081/api/token/jwks
-  jpa:
-    open-in-view: false
+
 server:
   port: 8082
+mq:
+  exchange: ums-exchange
+  rout:
+    task-confirmed: task-confirmed

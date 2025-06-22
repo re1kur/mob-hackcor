@@ -7,5 +7,5 @@ import re1kur.ums.entity.User;
 public interface UserMapper {
     User write(UserPayload payload);
 
-    UserDto read(User payload);
+    UserDto read(User user);
 }

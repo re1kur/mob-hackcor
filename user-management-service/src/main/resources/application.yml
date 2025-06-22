@@ -17,6 +17,7 @@ spring:
   jpa:
     open-in-view: false
 
+
 server:
   port: 8081
 
@@ -28,3 +29,7 @@ custom:
     privateKeyPath: /tmp/private.key
     publicKeyPath: /tmp/public.key
     kidPath: /tmp/kid.txt
+
+mq:
+  queue:
+    task-reward: task-reward-queue

@@ -8,6 +8,7 @@ public record UserDto (
         String email,
         String firstname,
         String lastname,
+        Integer rating,
         Boolean enabled
 ) {
 }

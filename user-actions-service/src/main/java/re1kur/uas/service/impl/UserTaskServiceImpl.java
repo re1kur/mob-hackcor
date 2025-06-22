@@ -8,8 +8,10 @@ import re1kur.core.exception.StatusUpdateFailedException;
 import re1kur.core.exception.UserTaskNotFoundException;
 import re1kur.uas.entity.UserTask;
 import re1kur.uas.entity.UserTaskId;
+import re1kur.uas.enums.Status;
 import re1kur.uas.mapper.UserTaskMapper;
 import re1kur.uas.repository.UserTaskRepository;
+import re1kur.uas.service.EventService;
 import re1kur.uas.service.UserTaskService;
 
 import java.util.List;
@@ -20,12 +22,16 @@ import java.util.UUID;
 public class UserTaskServiceImpl implements UserTaskService {
     private final UserTaskRepository repo;
     private final UserTaskMapper mapper;
+    private final EventService service;
 
     @Override
     @Transactional
     public void updateStatus(String userId, Long taskId, String status) {
-        Integer i = repo.updateStatus(UUID.fromString(userId), taskId, status);
+        UUID uuid = UUID.fromString(userId);
+        Integer i = repo.updateStatus(uuid, taskId, status);
         if (i < 0) throw new StatusUpdateFailedException("FAILED TO UPDATE STATUS USER TASK");
+        if (Status.confirmed.name().equals(status))
+            service.eventConfirmedTask(repo.findById(new UserTaskId(uuid, taskId)).get());
     }
 
     @Override

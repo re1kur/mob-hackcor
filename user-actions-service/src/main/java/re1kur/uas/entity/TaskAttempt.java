@@ -27,7 +27,7 @@ public class TaskAttempt {
     private Task task;
 
 
-    @Column(insertable = false)
+    @Column(insertable = false, nullable = false)
     private LocalDateTime attemptTime;
 
     private String textContent;

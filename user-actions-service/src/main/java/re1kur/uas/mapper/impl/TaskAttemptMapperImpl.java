@@ -7,6 +7,7 @@ import re1kur.core.payload.TaskAttemptUpdatePayload;
 import re1kur.uas.entity.TaskAttempt;
 import re1kur.uas.mapper.TaskAttemptMapper;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -18,6 +19,7 @@ public class TaskAttemptMapperImpl implements TaskAttemptMapper {
                 .textContent(payload.textContent())
                 .fileContentId(payload.fileContentId() != null ? UUID.fromString(payload.fileContentId()) : null)
                 .confirmed(null)
+                .attemptTime(LocalDateTime.now())
                 .build();
     }
 

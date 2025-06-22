@@ -5,18 +5,24 @@ services:
       - user-management-service/.env
     ports:
       - "5433:5432"
-  uas-postgres:
-    image: postgres:17
-    env_file:
-      - user-actions-service/.env
-    ports:
-      - "5434:5432"
   ums-redis:
     image: redis:latest
     env_file:
       - user-management-service/.env
     ports:
       - "6379:6379"
+  uas-postgres:
+    image: postgres:17
+    env_file:
+      - user-actions-service/.env
+    ports:
+      - "5434:5432"
+  ues-postgres:
+    image: postgres:17
+    env_file:
+      - user-education-service/.env
+    ports:
+      - "5436:5432"
   fs-postgres:
     image: postgres:17
     env_file:
@@ -31,12 +37,24 @@ services:
     ports:
       - '9000:9000'
       - '9001:9001'
+  rabbit:
+    env_file: .env
+    image: rabbitmq:latest
+    volumes:
+      - ./definitions.json:/etc/rabbitmq/definitions.json
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+    environment:
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbitmq_management load_definitions '/etc/rabbitmq/definitions.json'"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   ums-service:
     image: re1kur/ums:latest
     depends_on:
       - ums-postgres
       - ums-redis
+      - rabbit
     env_file:
       - user-management-service/.env
     build:
@@ -48,6 +66,7 @@ services:
     image: re1kur/uas:latest
     depends_on:
       - uas-postgres
+      - rabbit
     env_file:
       - user-actions-service/.env
     build:
@@ -67,3 +86,14 @@ services:
       context: .
     ports:
       - "8083:8083"
+  ues-service:
+    image: re1kur/ues:latest
+    depends_on:
+      - ues-postgres
+    env_file:
+      - user-education-service/.env
+    build:
+      dockerfile: user-education-service/Dockerfile
+      context: .
+    ports:
+      - "8084:8084"

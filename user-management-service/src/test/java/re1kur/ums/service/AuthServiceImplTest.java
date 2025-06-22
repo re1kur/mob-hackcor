@@ -19,15 +19,15 @@ import re1kur.ums.jwt.JwtToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.mapper.UserMapper;
 import re1kur.ums.repository.sql.UserRepository;
-import re1kur.ums.service.impl.UserServiceImpl;
+import re1kur.ums.service.impl.AuthServiceImpl;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
+class AuthServiceImplTest {
     @InjectMocks
-    private UserServiceImpl service;
+    private AuthServiceImpl service;
 
     @Mock
     private UserRepository repo;

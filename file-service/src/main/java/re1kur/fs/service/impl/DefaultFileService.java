@@ -3,6 +3,7 @@ package re1kur.fs.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import re1kur.core.dto.FileDto;
 import re1kur.core.exception.FileNotFoundException;
@@ -27,17 +28,13 @@ public class DefaultFileService implements FileService {
     private final StoreClient client;
 
     @Override
+    @Transactional
     public FileDto upload(MultipartFile payload) throws IOException {
-        File file = mapper.upload(payload);
+        UUID id = UUID.randomUUID();
+        client.upload(id.toString(), payload);
+        PresignedUrl resp = client.getUrl(id.toString());
 
-        file = repo.save(file);
-
-        String id = file.getId().toString();
-        client.upload(id, payload);
-
-        PresignedUrl resp = client.getUrl(id);
-        file.setUrl(resp.url());
-        file.setUrlExpiresAt(resp.expiration().atZone(ZoneId.systemDefault()));
+        File file = mapper.upload(payload, id, resp);
 
         file = repo.save(file);
 

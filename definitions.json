@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "name": "mobhackcor",
+      "password": "mobhackcor",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "mobhackcor",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "ums-exchange",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true
+    }
+  ],
+  "queues": [
+    {
+      "name": "task-reward-queue",
+      "vhost": "/",
+      "durable": true
+    }
+  ],
+  "bindings": [
+    {
+      "source": "ums-exchange",
+      "vhost": "/",
+      "destination": "task-reward-queue",
+      "routing_key": "task-confirmed",
+      "destination_type": "queue"
+    }
+  ]
+}

@@ -29,6 +29,7 @@ public class UserMapperImpl implements UserMapper {
                 .firstname(user.getInformation().getFirstname())
                 .lastname(user.getInformation().getLastname())
                 .enabled(user.getEnabled())
+                .rating(user.getInformation().getRating())
                 .build();
     }
 }

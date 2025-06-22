@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS task_attempts
     id              BIGSERIAL PRIMARY KEY,
     user_id         UUID   NOT NULL,
     task_id   BIGINT NOT NULL,
-    attempt_time    TIMESTAMP DEFAULT now(),
+    attempt_time    TIMESTAMP NOT NULL DEFAULT now(),
     text_content    TEXT,
     file_content_id UUID,
     confirmed       BOOLEAN,
