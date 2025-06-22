@@ -59,6 +59,7 @@ public class DefaultStoreClient implements StoreClient {
         PutObjectRequest request = PutObjectRequest.builder()
                 .key(id)
                 .bucket(bucket)
+                .contentType(payload.getContentType())
                 .build();
         s3Client.putObject(request, RequestBody.fromInputStream(payload.getInputStream(), payload.getSize()));
     }

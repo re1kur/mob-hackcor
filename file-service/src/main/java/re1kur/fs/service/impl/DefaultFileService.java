@@ -31,7 +31,14 @@ public class DefaultFileService implements FileService {
     @Transactional
     public FileDto upload(MultipartFile payload) throws IOException {
         UUID id = UUID.randomUUID();
-        client.upload(id.toString(), payload);
+        String originalFilename = payload.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        String key = id + extension;
+
+        client.upload(key, payload);
         PresignedUrl resp = client.getUrl(id.toString());
 
         File file = mapper.upload(payload, id, resp);
