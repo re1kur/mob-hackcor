@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS task_attempts
     task_id   BIGINT NOT NULL,
     attempt_time    TIMESTAMP NOT NULL DEFAULT now(),
     text_content    TEXT,
-    file_content_id UUID,
+    file_content_id VARCHAR(256),
     confirmed       BOOLEAN,
     moderator_id    UUID,
     FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE

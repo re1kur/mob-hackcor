@@ -39,9 +39,9 @@ public class DefaultFileService implements FileService {
         String key = id + extension;
 
         client.upload(key, payload);
-        PresignedUrl resp = client.getUrl(id.toString());
+        PresignedUrl resp = client.getUrl(key);
 
-        File file = mapper.upload(payload, id, resp);
+        File file = mapper.upload(payload, key, resp);
 
         file = repo.save(file);
 
@@ -51,7 +51,7 @@ public class DefaultFileService implements FileService {
 
     @Override
     public ResponseEntity<String> getUrl(String id) {
-        File file = repo.findById(UUID.fromString(id)).orElseThrow(() -> new FileNotFoundException("File with id '%s' does not exist.".formatted(id)));
+        File file = repo.findById(id).orElseThrow(() -> new FileNotFoundException("File with id '%s' does not exist.".formatted(id)));
         if (ZonedDateTime.now().isAfter(file.getUrlExpiresAt().toInstant().atZone(ZoneId.systemDefault()))) {
             file = updateUrl(file);
         }
@@ -59,7 +59,7 @@ public class DefaultFileService implements FileService {
     }
 
     private File updateUrl(File file) {
-        PresignedUrl resp = client.getUrl(file.getId().toString());
+        PresignedUrl resp = client.getUrl(file.getId());
         if (resp.expiration().equals(file.getUrlExpiresAt().toInstant().atZone(ZoneId.systemDefault()))) {
             throw new UrlUpdateException("The expiration has not been updated.");
         }

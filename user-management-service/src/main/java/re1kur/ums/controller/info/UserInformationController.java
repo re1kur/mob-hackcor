@@ -24,7 +24,7 @@ public class UserInformationController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<List<UserDto>> getInfo(@AuthenticationPrincipal JwtAuthenticationToken token) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.getPersonalInfo(token.getTokenAttributes().get("sub")));
+    public ResponseEntity<UserDto> getInfo(@AuthenticationPrincipal JwtAuthenticationToken token) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.getPersonalInfo(token.getTokenAttributes().get("sub").toString()));
     }
 }

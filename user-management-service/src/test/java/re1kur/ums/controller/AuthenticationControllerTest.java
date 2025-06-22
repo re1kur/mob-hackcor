@@ -12,6 +12,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import re1kur.core.dto.UserDto;
+import re1kur.core.dto.UserInformationDto;
 import re1kur.core.exception.UserAlreadyRegisteredException;
 import re1kur.core.exception.UserNotFoundException;
 import re1kur.core.payload.LoginRequest;
@@ -48,9 +49,8 @@ public class AuthenticationControllerTest {
         UserDto expectedDto = UserDto.builder()
                 .id("HERE-MUST-BE-UUID-ID")
                 .email("email@example.com")
-                .firstname("firstname")
-                .lastname("lastname")
                 .enabled(false)
+                .info(UserInformationDto.builder().firstname("firstname").lastname("lastname").build())
                 .build();
 
         Mockito.when(service.register(Mockito.any(UserPayload.class))).thenReturn(expectedDto);

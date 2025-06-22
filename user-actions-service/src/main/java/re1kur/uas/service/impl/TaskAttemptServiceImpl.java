@@ -34,12 +34,12 @@ public class TaskAttemptServiceImpl implements TaskAttemptService {
 
     @Override
     @Transactional
-    public TaskAttemptDto create(TaskAttemptPayload payload) {
+    public TaskAttemptDto create(String userId, TaskAttemptPayload payload) {
         Long id = payload.taskId();
         Task task = taskRepo.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException("Task %s not found.".formatted(id)));
 
-        TaskAttempt attempt = mapper.write(payload);
+        TaskAttempt attempt = mapper.write(payload, userId);
         attempt.setTask(task);
 
         return getTaskAttemptDto(attempt);

@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 @Builder
 public record FileDto(
         String id,
-        String extension,
+        String mediaType,
         String url,
         ZonedDateTime uploadedAt,
         ZonedDateTime urlExpiresAt

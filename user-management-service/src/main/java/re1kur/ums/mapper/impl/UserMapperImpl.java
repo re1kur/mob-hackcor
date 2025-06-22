@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import re1kur.core.dto.UserDto;
+import re1kur.core.dto.UserInformationDto;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.entity.User;
+import re1kur.ums.entity.UserInformation;
 import re1kur.ums.mapper.UserMapper;
 
 @Component
@@ -23,13 +25,18 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserDto read(User user) {
+        UserInformation info = user.getInformation();
+        UserInformationDto userInfoDto = UserInformationDto.builder()
+                .firstname(info.getFirstname())
+                .lastname(info.getLastname())
+                .level(info.getLevel())
+                .rating(info.getRating())
+                .build();
         return UserDto.builder()
                 .id(user.getId().toString())
                 .email(user.getEmail())
-                .firstname(user.getInformation().getFirstname())
-                .lastname(user.getInformation().getLastname())
                 .enabled(user.getEnabled())
-                .rating(user.getInformation().getRating())
+                .info(userInfoDto)
                 .build();
     }
 }

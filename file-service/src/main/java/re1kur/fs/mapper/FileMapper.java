@@ -8,7 +8,7 @@ import re1kur.fs.entity.File;
 import java.util.UUID;
 
 public interface FileMapper {
-    File upload(MultipartFile payload, UUID id, PresignedUrl url);
+    File upload(MultipartFile payload, String id, PresignedUrl url);
 
     FileDto read(File saved);
 }

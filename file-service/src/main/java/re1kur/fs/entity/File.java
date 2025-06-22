@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "files")
@@ -17,9 +16,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class File {
     @Id
-    private UUID id;
+    private String id;
 
-    private String extension;
+    private String mediaType;
 
     private String url;
 

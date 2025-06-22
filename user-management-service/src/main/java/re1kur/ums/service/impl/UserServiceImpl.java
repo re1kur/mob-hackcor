@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService {
                 .stream().map(mapper::read)
                 .toList();
     }
+
+    @Override
+    public UserDto getPersonalInfo(String sub) {
+        return mapper.read(userRepo.getReferenceById(UUID.fromString(sub)));
+    }
 }

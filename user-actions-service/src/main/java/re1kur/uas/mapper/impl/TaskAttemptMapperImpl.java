@@ -13,9 +13,9 @@ import java.util.UUID;
 @Component
 public class TaskAttemptMapperImpl implements TaskAttemptMapper {
     @Override
-    public TaskAttempt write(TaskAttemptPayload payload) {
+    public TaskAttempt write(TaskAttemptPayload payload, String userId) {
         return TaskAttempt.builder()
-                .userId(UUID.fromString(payload.userId()))
+                .userId(UUID.fromString(userId))
                 .textContent(payload.textContent())
                 .fileContentId(payload.fileContentId() != null ? UUID.fromString(payload.fileContentId()) : null)
                 .confirmed(null)

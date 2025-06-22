@@ -6,7 +6,7 @@ import re1kur.core.payload.TaskAttemptUpdatePayload;
 import re1kur.uas.entity.TaskAttempt;
 
 public interface TaskAttemptMapper {
-    TaskAttempt write(TaskAttemptPayload payload);
+    TaskAttempt write(TaskAttemptPayload payload, String userId);
 
     TaskAttemptDto read(TaskAttempt attempt);
 

@@ -5,7 +5,7 @@ import re1kur.core.payload.TaskAttemptPayload;
 import re1kur.core.payload.TaskAttemptUpdatePayload;
 
 public interface TaskAttemptService {
-    TaskAttemptDto create(TaskAttemptPayload payload);
+    TaskAttemptDto create(String userId, TaskAttemptPayload payload);
 
     TaskAttemptDto getById(Long id);
 
