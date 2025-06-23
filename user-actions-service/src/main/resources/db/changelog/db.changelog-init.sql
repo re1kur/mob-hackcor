@@ -11,7 +11,6 @@ VALUES
     (6, 'Пригласить друга', 'Пригласите друга зарегистрироваться', 25);
 
 -- changeset re1kur:2
--- Попытки пользователя (user@mail.com)
 INSERT INTO task_attempts(id, user_id, task_id, text_content, confirmed, moderator_id)
 VALUES
     (1, '22222222-2222-2222-2222-222222222222', 1, 'Репост сделан в Telegram', true, '11111111-1111-1111-1111-111111111111'),
@@ -22,7 +21,6 @@ VALUES
     (6, '22222222-2222-2222-2222-222222222222', 6, 'Друг зарегистрировался по ссылке', false, '11111111-1111-1111-1111-111111111111');
 
 -- changeset re1kur:3
--- Статусы заданий для пользователя
 INSERT INTO users_tasks(user_id, task_id, last_attempt_id, status)
 VALUES
     ('22222222-2222-2222-2222-222222222222', 1, 1, 'confirmed'),

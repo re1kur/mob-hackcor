@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 
 @Slf4j
@@ -55,17 +56,25 @@ public class DefaultStoreClient implements StoreClient {
 
 
     @Override
-    public void upload(String id, MultipartFile payload) throws IOException {
-        PutObjectRequest request = PutObjectRequest.builder()
-                .key(id)
-                .bucket(bucket)
-                .contentType(payload.getContentType())
-                .build();
-        s3Client.putObject(request, RequestBody.fromInputStream(payload.getInputStream(), payload.getSize()));
+    public void upload(String id, MultipartFile payload) {
+        log.info("Uploading file request: {} | {}", payload.getOriginalFilename(), payload.getContentType());
+        try (InputStream inputStream = payload.getInputStream()) {
+            PutObjectRequest request = PutObjectRequest.builder()
+                    .key(id)
+                    .bucket(bucket)
+                    .contentType(payload.getContentType())
+                    .build();
+            RequestBody requestBody = RequestBody.fromInputStream(inputStream, payload.getSize());
+            PutObjectResponse putObjectResponse = s3Client.putObject(request, requestBody);
+            log.info("Uploaded file : {}", putObjectResponse.toString());
+        } catch (IOException e) {
+            log.error("Error reading/uploading file: {}", e.getMessage(), e);
+        }
     }
 
     @Override
     public PresignedUrl getUrl(String id) {
+        log.info("Getting presigned url for file {}", id);
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucket)
                 .key(id)
@@ -77,6 +86,12 @@ public class DefaultStoreClient implements StoreClient {
                 .build();
 
         PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(presignRequest);
-        return new PresignedUrl(presignedGetObjectRequest.url().toExternalForm(), presignedGetObjectRequest.expiration());
+
+        log.info("Received presigned URL: Host: {} | Port : {} | Path : {}",
+                presignedGetObjectRequest.url().getHost(),
+                presignedGetObjectRequest.url().getPort(),
+                presignedGetObjectRequest.url().getPath());
+
+        return new PresignedUrl(presignedGetObjectRequest.url().toString(), presignedGetObjectRequest.expiration());
     }
 }

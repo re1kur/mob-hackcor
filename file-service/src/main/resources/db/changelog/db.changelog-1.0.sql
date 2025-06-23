@@ -4,7 +4,7 @@
 CREATE TABLE files
 (
     id             VARCHAR(256) PRIMARY KEY,
-    mediaType      VARCHAR(64)              NOT NULL,
+    media_type      VARCHAR(64)              NOT NULL,
     url            VARCHAR(2048)            NOT NULL UNIQUE,
     uploaded_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     url_expires_at TIMESTAMP WITH TIME ZONE

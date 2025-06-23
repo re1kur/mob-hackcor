@@ -3,7 +3,7 @@ package re1kur.uas.controller.task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import re1kur.core.dto.UserTaskDto;
 import re1kur.uas.enums.Status;
@@ -18,16 +18,16 @@ public class UserTaskController {
     private final UserTaskService service;
 
     @GetMapping
-    public List<UserTaskDto> getAllYours(@AuthenticationPrincipal JwtAuthenticationToken token) {
-        return service.getAllByUser(token.getTokenAttributes().get("sub").toString());
+    public List<UserTaskDto> getAllYours(@AuthenticationPrincipal Jwt token) {
+        return service.getAllByUser(token.getSubject());
     }
 
     @GetMapping("/{taskId}")
     public ResponseEntity<UserTaskDto> get(
-            @AuthenticationPrincipal JwtAuthenticationToken token,
+            @AuthenticationPrincipal Jwt token,
             @PathVariable Long taskId
     ) {
-        return ResponseEntity.ok(service.getById(token.getTokenAttributes().get("sub").toString(), taskId));
+        return ResponseEntity.ok(service.getById(token.getSubject(), taskId));
     }
 
     @PutMapping("/{taskId}/update-status")

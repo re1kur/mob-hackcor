@@ -19,6 +19,9 @@ public class MinioConfiguration {
     @Value("${minio.endpoint}")
     private String endpoint;
 
+    @Value("${minio.endpoint-override}")
+    private String endpointOverride;
+
     @Value("${minio.access-key}")
     private String accessKey;
 
@@ -40,9 +43,10 @@ public class MinioConfiguration {
     public S3Presigner s3Presigner() {
         AwsCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
         return S3Presigner.builder()
-                .region(Region.AWS_GLOBAL)
+                .region(Region.EU_CENTRAL_1)
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
-                .endpointOverride(URI.create(endpoint))
+                .endpointOverride(URI.create(endpointOverride))
+                .serviceConfiguration(S3Configuration.builder().pathStyleAccessEnabled(true).build())
                 .build();
     }
 }
