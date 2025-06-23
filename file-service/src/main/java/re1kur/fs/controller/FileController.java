@@ -24,6 +24,6 @@ public class FileController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<String> downloadFile(@PathVariable("id") String id) {
-        return service.getUrl(id);
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.getUrl(id));
     }
 }

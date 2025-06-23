@@ -1,26 +1,29 @@
 package re1kur.fs.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import re1kur.core.exception.FileNotFoundException;
 import re1kur.core.exception.UrlUpdateException;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 public class DefaultControllerAdvice {
 
-    @ExceptionHandler(exception = IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.badRequest().body("Invalid file id: " + ex.getMessage());
+    @ExceptionHandler(exception = IOException.class)
+    public ResponseEntity<String> handleIOException(IOException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid file, file not reading: " + ex.getMessage());
     }
 
     @ExceptionHandler(exception = FileNotFoundException.class)
     public ResponseEntity<String> handleFileNotFoundException(FileNotFoundException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(exception = UrlUpdateException.class)
     public ResponseEntity<String> handleUrlUpdateException(UrlUpdateException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

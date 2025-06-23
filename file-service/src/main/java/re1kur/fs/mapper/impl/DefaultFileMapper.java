@@ -8,6 +8,7 @@ import re1kur.fs.entity.File;
 import re1kur.fs.mapper.FileMapper;
 
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Component
 public class DefaultFileMapper implements FileMapper {
@@ -16,6 +17,7 @@ public class DefaultFileMapper implements FileMapper {
         return File.builder()
                 .id(id)
                 .url(resp.url())
+                .uploadedAt(ZonedDateTime.now())
                 .urlExpiresAt(resp.expiration().atZone(ZoneId.systemDefault()))
                 .mediaType(payload.getContentType())
                 .build();
