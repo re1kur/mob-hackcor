@@ -1,4 +1,4 @@
-package re1kur.ums.jwt;
+package re1kur.core.dto;
 
 import lombok.Builder;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record JwtToken(
-        String body,
+        String accessToken,
         String refreshToken,
         LocalDateTime expiresAt,
         LocalDateTime refreshExpiresAt

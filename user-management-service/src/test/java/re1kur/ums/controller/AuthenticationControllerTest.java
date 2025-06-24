@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -18,7 +19,7 @@ import re1kur.core.exception.UserNotFoundException;
 import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.controller.auth.AuthenticationController;
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 import re1kur.ums.service.AuthService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = AuthenticationController.class)
 @ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class AuthenticationControllerTest {
     private static final String URL = "/api/auth";
 
@@ -80,7 +82,7 @@ public class AuthenticationControllerTest {
                         .post(URL + "/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(payload)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
 
         Mockito.verify(service, Mockito.times(1)).register(payload);
     }
@@ -122,13 +124,13 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    void testLogin__UserFound__DoesNotThrowException() throws Exception {
+    void testLogin__ExistingUser__DoesNotThrowException() throws Exception {
         LoginRequest request = LoginRequest.builder()
                 .email("email@example.com")
                 .password("password")
                 .build();
         JwtToken expected = JwtToken.builder()
-                .body("eyJaHeader.payload.signature")
+                .accessToken("eyJaHeader.payload.signature")
                 .build();
 
         Mockito.when(service.login(
@@ -136,13 +138,13 @@ public class AuthenticationControllerTest {
                         .email("email@example.com")
                         .password("password")
                         .build())
-        ).thenReturn(JwtToken.builder().body("eyJaHeader.payload.signature").build());
+        ).thenReturn(JwtToken.builder().accessToken("eyJaHeader.payload.signature").build());
 
         mvc.perform(MockMvcRequestBuilders
                         .post(URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expected)));
 
         Mockito.verify(service, Mockito.times(1)).login(request);
@@ -198,7 +200,7 @@ public class AuthenticationControllerTest {
                         .post(URL + "/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
 
         Mockito.verify(service, Mockito.times(1)).login(request);
     }

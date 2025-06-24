@@ -16,6 +16,11 @@ spring:
     change-log: db/changelog/db.changelog-master.yml
   jpa:
     open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://ums-service:8081/api/token/jwks
 
 
 server:

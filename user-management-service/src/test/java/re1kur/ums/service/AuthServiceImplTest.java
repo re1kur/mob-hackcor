@@ -15,7 +15,7 @@ import re1kur.core.exception.UserNotFoundException;
 import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.jwt.JwtProvider;
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.mapper.UserMapper;
 import re1kur.ums.repository.sql.UserRepository;
@@ -66,6 +66,7 @@ class AuthServiceImplTest {
         Mockito.when(mapper.write(Mockito.any(UserPayload.class))).thenReturn(mapped);
         Mockito.when(repo.save(Mockito.any(User.class))).thenReturn(saved);
         Mockito.when(mapper.read(Mockito.any(User.class))).thenReturn(expected);
+        Mockito.when(repo.findById(Mockito.any(UUID.class))).thenReturn(Optional.of(mapped));
 
         UserDto result = Assertions.assertDoesNotThrow(() -> service.register(payload));
         Assertions.assertEquals(expected, result);
@@ -105,7 +106,7 @@ class AuthServiceImplTest {
                 .enabled(true)
                 .build();
         JwtToken expected = JwtToken.builder()
-                .body("eyJaHeader.payload.signature")
+                .accessToken("eyJaHeader.payload.signature")
                 .build();
 
         Mockito.when(repo.findByEmail("email@example.com")).thenReturn(Optional.of(user));

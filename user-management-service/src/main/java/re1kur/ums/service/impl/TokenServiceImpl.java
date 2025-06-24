@@ -6,20 +6,19 @@ import com.nimbusds.jwt.JWTParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import re1kur.core.exception.InvalidTokenException;
-import re1kur.core.exception.TokenMismatchException;
-import re1kur.core.exception.TokenNotFoundException;
-import re1kur.core.exception.UserNotFoundException;
+import re1kur.core.exception.*;
 import re1kur.ums.entity.RefreshToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.jwt.JwtProvider;
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 import re1kur.ums.repository.redis.TokenRepository;
 import re1kur.ums.repository.sql.UserRepository;
 import re1kur.ums.service.TokenService;
 
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,22 +38,31 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public JwtToken refreshToken(String refreshToken) throws ParseException {
-        JWT parsed = JWTParser.parse(refreshToken);
-        if (!jwtProvider.verifyToken(parsed)) {
-            throw new InvalidTokenException("Invalid refresh token");
-        }
+        String userIdStr = verify(refreshToken);
 
-        String userIdStr = parsed.getJWTClaimsSet().getSubject();
-
-        RefreshToken token = repo.findById(userIdStr).orElseThrow(() -> new TokenNotFoundException("Token for user %s not found.".formatted(userIdStr)));
-
+        RefreshToken token = repo.findById(userIdStr).orElseThrow(() ->
+                new TokenNotFoundException("Token for user %s not found.".formatted(userIdStr)));
         if (!token.getBody().equals(refreshToken)) {
             throw new TokenMismatchException("Refresh token mismatch");
         }
+
         UUID userId = UUID.fromString(userIdStr);
         User user = userRepo.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return jwtProvider.getToken(user);
+    }
+
+    private String verify(String refreshToken) throws ParseException {
+        JWT parsed = JWTParser.parse(refreshToken);
+        String userIdStr = parsed.getJWTClaimsSet().getSubject();
+        Instant expiration = parsed.getJWTClaimsSet().getExpirationTime().toInstant();
+        if (!jwtProvider.verifySignature(parsed)) {
+            throw new TokenDidNotPassVerificationException("Token did not pass verification.");
+        }
+        if (Instant.now().isAfter(expiration)) {
+            throw new TokenHasExpiredException("Token has expired. Authenticate again.");
+        }
+        return userIdStr;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package re1kur.ums.service;
 
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 
 import java.text.ParseException;
 import java.util.Map;

@@ -21,7 +21,7 @@ public class User {
 
     private String password;
 
-    @Column(insertable = false)
+    @Column(insertable = false, columnDefinition = "DEFAULT FALSE")
     private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -31,7 +31,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private UserInformation information;
 }

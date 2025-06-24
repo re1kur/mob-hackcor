@@ -6,15 +6,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import re1kur.core.exception.InvalidTokenException;
+import re1kur.core.exception.TokenDidNotPassVerificationException;
 import re1kur.core.exception.TokenMismatchException;
 import re1kur.core.exception.TokenNotFoundException;
 import re1kur.ums.controller.auth.TokenController;
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 import re1kur.ums.service.TokenService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = TokenController.class)
 @ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 class TokenControllerTest {
     @MockitoBean
     private TokenService service;
@@ -43,8 +45,8 @@ class TokenControllerTest {
 
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
-                        .param("refreshToken", refreshToken))
-                .andExpect(status().isFound())
+                        .content(refreshToken))
+                .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expected)));
     }
 
@@ -64,7 +66,7 @@ class TokenControllerTest {
     void testRefreshToken__InvalidToken__ThrowsInvalidTokenException() throws Exception {
         String refreshToken = "invalidTokenExample";
 
-        Mockito.when(service.refreshToken("invalidTokenExample")).thenThrow(InvalidTokenException.class);
+        Mockito.when(service.refreshToken("invalidTokenExample")).thenThrow(TokenDidNotPassVerificationException.class);
 
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
@@ -81,6 +83,6 @@ class TokenControllerTest {
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
                         .param("refreshToken", refreshToken))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 }

@@ -23,8 +23,10 @@ public class UserInformation {
 
     private String lastname;
 
+    @Column(insertable = false, columnDefinition = "DEFAULT 0")
     private Integer rating;
 
+    @Column(insertable = false, columnDefinition = "DEFAULT 'NEWCOMER'")
     private String level;
 
     @OneToOne

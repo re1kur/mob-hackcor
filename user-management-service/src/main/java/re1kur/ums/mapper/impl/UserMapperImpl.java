@@ -25,13 +25,17 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserDto read(User user) {
-        UserInformation info = user.getInformation();
-        UserInformationDto userInfoDto = UserInformationDto.builder()
-                .firstname(info.getFirstname())
-                .lastname(info.getLastname())
-                .level(info.getLevel())
-                .rating(info.getRating())
-                .build();
+        UserInformationDto userInfoDto = null;
+        if (user.getInformation() != null) {
+            UserInformation info = user.getInformation();
+            userInfoDto = UserInformationDto.builder()
+                    .firstname(info.getFirstname())
+                    .lastname(info.getLastname())
+                    .level(info.getLevel())
+                    .rating(info.getRating())
+                    .build();
+        }
+
         return UserDto.builder()
                 .id(user.getId().toString())
                 .email(user.getEmail())

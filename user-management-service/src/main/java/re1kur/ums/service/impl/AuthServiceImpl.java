@@ -3,6 +3,7 @@ package re1kur.ums.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import re1kur.core.dto.UserDto;
 import re1kur.core.exception.InvalidCredentialsException;
 import re1kur.core.exception.UserAlreadyRegisteredException;
@@ -11,7 +12,7 @@ import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
 import re1kur.ums.entity.UserInformation;
 import re1kur.ums.jwt.JwtProvider;
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.mapper.UserMapper;
 import re1kur.ums.repository.sql.UserRepository;
@@ -28,19 +29,21 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
 
     @Override
-    public UserDto register(UserPayload payload) {
+    @Transactional
+    public UUID register(UserPayload payload) {
         if (repo.existsByEmail(payload.email()))
             throw new UserAlreadyRegisteredException(
                     "User with email %s already registered.".formatted(payload.email()));
         User mapped = mapper.write(payload);
-        User saved = repo.save(mapped);
         UserInformation info = UserInformation.builder()
                 .firstname(payload.firstname())
                 .lastname(payload.lastname())
-                .user(saved)
+                .user(mapped)
                 .build();
-        saved.setInformation(info);
-        return mapper.read(saved);
+        mapped.setInformation(info);
+
+        User saved = repo.save(mapped);
+        return saved.getId();
     }
 
     @Override

@@ -16,7 +16,7 @@ import re1kur.ums.entity.RefreshToken;
 import re1kur.ums.entity.User;
 import re1kur.ums.jwt.Credentials;
 import re1kur.ums.jwt.JwtProvider;
-import re1kur.ums.jwt.JwtToken;
+import re1kur.core.dto.JwtToken;
 import re1kur.ums.repository.redis.TokenRepository;
 
 import java.nio.charset.StandardCharsets;
@@ -67,7 +67,7 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     @Override
-    public boolean verifyToken(JWT refreshToken) {
+    public boolean verifySignature(JWT refreshToken) {
         RSAPublicKey publicKey = readPublicKeyFromFile(publicKeyPath);
         return verifyJWTSign(publicKey, (SignedJWT) refreshToken);
     }
@@ -117,7 +117,7 @@ public class JwtProviderImpl implements JwtProvider {
         verifyJWTSign(publicKey, refreshToken);
 
         JwtToken build = JwtToken.builder()
-                .body(accessToken.serialize())
+                .accessToken(accessToken.serialize())
                 .refreshToken(refreshToken.serialize())
                 .expiresAt(LocalDateTime.now().plusHours(accessTtl))
                 .refreshExpiresAt(LocalDateTime.now().plusDays(refreshTtl))

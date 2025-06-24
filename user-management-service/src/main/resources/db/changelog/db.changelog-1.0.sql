@@ -39,6 +39,6 @@ CREATE TABLE IF NOT EXISTS user_information
     level     VARCHAR(64) CHECK (
         level IN ('NEWCOMER', 'OBSERVER', 'ACTIVIST', 'TRANSPARENCY AGENT')
         )         DEFAULT 'NEWCOMER',
-    rating   INT DEFAULT 0,
+    rating   INT NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

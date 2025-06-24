@@ -39,7 +39,7 @@ public class UserTaskControllerTest {
             Status.pending.name());
 
 //    @Test
-//    void getAllTasks_shouldReturnList() throws Exception {
+//    void getAllTasksByUser__shouldReturnList() throws Exception {
 //        given(service.getAllByUser(dummyTask.userId())).willReturn(List.of(dummyTask));
 //
 //        mockMvc.perform(get("/api/user-task")

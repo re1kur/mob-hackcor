@@ -2,7 +2,9 @@ package re1kur.ums.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import re1kur.core.dto.UserDto;
+import re1kur.core.exception.UserNotFoundException;
 import re1kur.ums.entity.UserInformation;
 import re1kur.ums.mapper.UserMapper;
 import re1kur.ums.repository.sql.UserInformationRepository;
@@ -34,7 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto getPersonalInfo(String sub) {
-        return mapper.read(userRepo.getReferenceById(UUID.fromString(sub)));
+        return mapper.read(userRepo.findById(
+                UUID.fromString(sub)).orElseThrow(() ->
+                new UserNotFoundException("User %s not found.".formatted(sub))));
     }
 }
