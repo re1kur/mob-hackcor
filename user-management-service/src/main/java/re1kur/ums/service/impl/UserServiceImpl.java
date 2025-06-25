@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import re1kur.core.dto.UserDto;
 import re1kur.core.exception.UserNotFoundException;
+import re1kur.core.payload.UserInformationPayload;
+import re1kur.ums.entity.User;
 import re1kur.ums.entity.UserInformation;
 import re1kur.ums.mapper.UserMapper;
 import re1kur.ums.repository.sql.UserInformationRepository;
@@ -41,5 +43,21 @@ public class UserServiceImpl implements UserService {
         return mapper.read(userRepo.findById(
                 UUID.fromString(sub)).orElseThrow(() ->
                 new UserNotFoundException("User %s not found.".formatted(sub))));
+    }
+
+    @Override
+    public UserDto updateUserInfo(UserInformationPayload payload, String subject) {
+        User user = userRepo.findById(UUID.fromString(subject)).orElseThrow(() -> new UserNotFoundException("User %s not found.".formatted(subject)));
+        UserInformation information = user.getInformation();
+        if (information == null) {
+            information = UserInformation.builder()
+                    .userId(user.getId())
+                    .build();
+            user.setInformation(information);
+        }
+        information.setFirstname(payload.firstname());
+        information.setLastname(payload.lastname());
+        infoRepo.save(information);
+        return mapper.read(user);
     }
 }

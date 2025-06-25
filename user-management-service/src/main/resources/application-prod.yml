@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: user-management-service
+  docker:
+    compose:
+      enabled: false
+  data:
+    redis:
+      url: ${SPRING_DATA_REDIS_URL}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml
+  jpa:
+    open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://ums-service:8081/api/token/jwks

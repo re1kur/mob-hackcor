@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: user-management-service
+  docker:
+    compose:
+      enabled: true
+      file: ./user-management-service/docker-compose.yml
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yml
+  jpa:
+    open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/api/token/jwks
