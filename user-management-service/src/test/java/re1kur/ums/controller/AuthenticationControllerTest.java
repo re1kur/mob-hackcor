@@ -20,6 +20,8 @@ import re1kur.ums.controller.auth.AuthenticationController;
 import re1kur.core.dto.JwtToken;
 import re1kur.ums.service.AuthService;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,32 +40,26 @@ public class AuthenticationControllerTest {
     @MockitoBean
     AuthService service;
 
-//    @Test
-//    void testRegister__ValidUser__DoesNotThrowException() throws Exception {
-//        UserPayload payload = UserPayload.builder()
-//                .email("email@example.com")
-//                .password("password")
-//                .firstname("firstname")
-//                .lastname("lastname")
-//                .build();
-//        UserDto expectedDto = UserDto.builder()
-//                .id("HERE-MUST-BE-UUID-ID")
-//                .email("email@example.com")
-//                .enabled(false)
-//                .info(UserInformationDto.builder().firstname("firstname").lastname("lastname").build())
-//                .build();
-//
-//        Mockito.when(service.register(Mockito.any(UserPayload.class))).thenReturn(UUID.fromString(expectedDto.id()));
-//
-//        mvc.perform(MockMvcRequestBuilders
-//                        .post(URL + "/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(payload)))
-//                .andExpect(status().isCreated())
-//                .andExpect(content().json(expectedDto.id()));
-//
-//        Mockito.verify(service, Mockito.times(1)).register(payload);
-//    }
+    @Test
+    void testRegister__ValidUser__DoesNotThrowException() throws Exception {
+        UserPayload payload = UserPayload.builder()
+                .email("email@example.com")
+                .password("password")
+                .firstname("firstname")
+                .lastname("lastname")
+                .build();
+        UUID expected = UUID.randomUUID();
+        Mockito.when(service.register(Mockito.any(UserPayload.class))).thenReturn(expected);
+
+        mvc.perform(MockMvcRequestBuilders
+                        .post(URL + "/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(payload)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(mapper.writeValueAsString(expected)));
+
+        Mockito.verify(service, Mockito.times(1)).register(payload);
+    }
 
     @Test
     void testRegister__AlreadyRegisteredUser__DoesThrowUserAlreadyRegisteredException() throws Exception {

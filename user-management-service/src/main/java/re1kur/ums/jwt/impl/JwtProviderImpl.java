@@ -135,7 +135,7 @@ public class JwtProviderImpl implements JwtProvider {
 
     @PostConstruct
     private void checkKeys() {
-        if (!Files.exists(Paths.get(publicKeyPath))) {
+        if (!Files.exists(Paths.get(publicKeyPath)) || !Files.exists(Paths.get(kidPath))) {
             generateKeyPair();
         }
     }
@@ -154,11 +154,28 @@ public class JwtProviderImpl implements JwtProvider {
         KeyPairGenerator pairGenerator = KeyPairGenerator.getInstance("RSA");
         pairGenerator.initialize(keySize);
         KeyPair keyPair = pairGenerator.generateKeyPair();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        Files.write(Paths.get(publicKeyPath), publicKey.getEncoded(), StandardOpenOption.CREATE_NEW);
-        Files.write(Paths.get(privateKeyPath), privateKey.getEncoded(), StandardOpenOption.CREATE_NEW);
-        Files.write(Paths.get(kidPath), kid.getBytes(), StandardOpenOption.CREATE_NEW);
+
+        Files.deleteIfExists(Paths.get(publicKeyPath));
+        Files.deleteIfExists(Paths.get(privateKeyPath));
+        Files.deleteIfExists(Paths.get(kidPath));
+
+        Files.write(
+                Paths.get(publicKeyPath),
+                keyPair.getPublic().getEncoded(),
+                StandardOpenOption.CREATE_NEW
+        );
+
+        Files.write(
+                Paths.get(privateKeyPath),
+                keyPair.getPrivate().getEncoded(),
+                StandardOpenOption.CREATE_NEW
+        );
+
+        Files.write(
+                Paths.get(kidPath),
+                kid.getBytes(),
+                StandardOpenOption.CREATE_NEW
+        );
     }
 
     @SneakyThrows

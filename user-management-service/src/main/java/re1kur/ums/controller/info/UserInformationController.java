@@ -19,8 +19,8 @@ public class UserInformationController {
     private final UserService service;
 
     @GetMapping("/rating")
-    public ResponseEntity<List<UserDto>> getRating(@RequestParam Integer size) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getUsersByRating(size));
+    public ResponseEntity<List<UserDto>> getRating() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getUsersByRating());
     }
 
     @GetMapping("/info")

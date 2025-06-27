@@ -1,6 +1,7 @@
 package re1kur.ums.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import re1kur.core.dto.UserDto;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final UserMapper mapper;
 
+    @Value("${custom.query.rating.limit}")
+    private Integer limit;
+
     @Override
     public void reward(String userId, Integer reward) {
         UserInformation information = infoRepo.findByUserId(UUID.fromString(userId)).orElseThrow();
@@ -31,8 +35,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsersByRating(Integer size) {
-        return userRepo.findAllOrderByRating(size)
+    public List<UserDto> getUsersByRating() {
+        return userRepo.findAllOrderByRating(limit)
                 .stream().map(mapper::read)
                 .toList();
     }

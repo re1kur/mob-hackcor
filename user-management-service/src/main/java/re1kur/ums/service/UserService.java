@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     void reward(String userId, Integer reward);
 
-    List<UserDto> getUsersByRating(Integer size);
+    List<UserDto> getUsersByRating();
 
     UserDto getPersonalInfo(String sub);
 

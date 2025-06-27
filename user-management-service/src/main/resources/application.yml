@@ -2,7 +2,7 @@ spring:
   application:
     name: user-management-service
   profiles:
-    active: prod
+    active: dev
 server:
   port: 8081
 
@@ -14,7 +14,12 @@ custom:
     privateKeyPath: /tmp/private.key
     publicKeyPath: /tmp/public.key
     kidPath: /tmp/kid.txt
+  query:
+    rating:
+      limit: 10
 
 mq:
   queue:
     task-reward: task-reward-queue
+
+
