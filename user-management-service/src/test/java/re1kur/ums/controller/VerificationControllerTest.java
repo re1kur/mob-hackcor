@@ -13,7 +13,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import re1kur.core.exception.*;
 import re1kur.core.payload.EmailVerificationPayload;
-import re1kur.ums.controller.auth.VerificationController;
 import re1kur.ums.service.VerificationService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

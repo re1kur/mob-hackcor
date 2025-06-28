@@ -1,17 +1,14 @@
 package re1kur.ums.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import re1kur.core.exception.CodeHasExpiredException;
-import re1kur.core.exception.CodeMismatchException;
-import re1kur.core.exception.CodeNotFoundException;
-import re1kur.core.exception.UserNotFoundException;
+import re1kur.core.exception.*;
 import re1kur.core.other.CodeGenerator;
 import re1kur.core.payload.EmailVerificationPayload;
 import re1kur.ums.entity.Code;
@@ -40,10 +37,15 @@ class VerificationServiceTest {
     private CodeMapper mapper;
 
     private static UUID id;
+    private User user;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+     void setUp() {
         id = UUID.randomUUID();
+        user = User.builder()
+                .id(id)
+                .enabled(false)
+                .build();
     }
 
     @Test
@@ -51,9 +53,6 @@ class VerificationServiceTest {
         EmailVerificationPayload payload = EmailVerificationPayload.builder()
                 .email("email@example.com")
                 .code("123123")
-                .build();
-        User user = User.builder()
-                .id(id)
                 .build();
         Code expected = Code.builder()
                 .id(id.toString())
@@ -92,9 +91,6 @@ class VerificationServiceTest {
                 .email("email@example.com")
                 .code("123123")
                 .build();
-        User user = User.builder()
-                .id(id)
-                .build();
 
         Mockito.when(userRepo.findByEmail("email@example.com")).thenReturn(Optional.of(user));
         Mockito.when(codeRepo.findById(user.getId().toString())).thenReturn(Optional.empty());
@@ -110,9 +106,6 @@ class VerificationServiceTest {
         EmailVerificationPayload payload = EmailVerificationPayload.builder()
                 .email("email@example.com")
                 .code("123123")
-                .build();
-        User user = User.builder()
-                .id(id)
                 .build();
         Code expected = Code.builder()
                 .id(id.toString())
@@ -136,9 +129,7 @@ class VerificationServiceTest {
                 .email("email@example.com")
                 .code("123123")
                 .build();
-        User user = User.builder()
-                .id(id)
-                .build();
+
         Code expected = Code.builder()
                 .id(id.toString())
                 .value("123123")
@@ -156,10 +147,30 @@ class VerificationServiceTest {
     }
 
     @Test
+    void testVerifyEmail__UserAlreadyVerified__ThrowsUserAlreadyVerifiedException() {
+        EmailVerificationPayload payload = EmailVerificationPayload.builder()
+                .email("email@example.com")
+                .code("123123")
+                .build();
+
+        user = User.builder()
+                .id(id)
+                .enabled(true)
+                .build();
+
+        Mockito.when(userRepo.findByEmail("email@example.com")).thenReturn(Optional.of(user));
+
+        Assertions.assertThrows(UserAlreadyVerifiedException.class, () -> service.verifyEmail(payload));
+
+        Mockito.verify(userRepo, Mockito.times(1)).findByEmail("email@example.com");
+        Mockito.verifyNoInteractions(codeRepo);
+    }
+
+    @Test
     void testGenerateCode__UserExists__GeneratesAndSavesCode() {
         String email = "email@example.com";
         UUID userId = UUID.randomUUID();
-        User user = User.builder()
+        user = User.builder()
                 .id(userId)
                 .email(email)
                 .build();

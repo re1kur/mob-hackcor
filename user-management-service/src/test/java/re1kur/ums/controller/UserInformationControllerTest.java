@@ -21,7 +21,6 @@ import re1kur.core.dto.UserDto;
 import re1kur.core.dto.UserInformationDto;
 import re1kur.core.exception.UserNotFoundException;
 import re1kur.core.payload.UserInformationPayload;
-import re1kur.ums.controller.info.UserInformationController;
 import re1kur.ums.service.UserService;
 
 import java.util.List;

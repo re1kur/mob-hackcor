@@ -13,10 +13,10 @@ spring:
       enabled: false
 
 minio:
-  access-key: mobhackcor
-  secret-key: mobhackcor
-  endpoint: http://fs-minio:9000
-  endpoint-override: http://localhost:9000
+  access-key: ${SPRING_MINIO_ACCESS_KEY}
+  secret-key: ${SPRING_MINIO_SECRET_KEY}
+  endpoint: ${SPRING_MINIO_ENDPOINT}
+  endpoint-override: ${SPRING_MINIO_ENDPOINT_OVERRIDE}
   url:
     time-to-live: 7
   default-bucket: mobhackcor-bucket

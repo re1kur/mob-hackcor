@@ -8,13 +8,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import re1kur.core.exception.TokenDidNotPassVerificationException;
 import re1kur.core.exception.TokenMismatchException;
 import re1kur.core.exception.TokenNotFoundException;
-import re1kur.ums.controller.auth.TokenController;
+import re1kur.core.payload.RefreshTokenPayload;
 import re1kur.core.dto.JwtToken;
 import re1kur.ums.service.TokenService;
 
@@ -38,51 +39,55 @@ class TokenControllerTest {
 
     @Test
     void testRefreshToken__ValidToken__DoesNotThrowException() throws Exception {
-        String refreshToken = "validTokenExample";
+        RefreshTokenPayload payload = new RefreshTokenPayload("validTokenExample");
         JwtToken expected = Mockito.mock(JwtToken.class);
 
         Mockito.when(service.refreshToken("validTokenExample")).thenReturn(expected);
 
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
-                        .content(refreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(payload)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expected)));
     }
 
     @Test
     void testRefreshToken__NotMatchedToken__ThrowsTokenMismatchException() throws Exception {
-        String refreshToken = "tokenNotMatchWithReal";
+        RefreshTokenPayload payload = new RefreshTokenPayload("tokenNotMatchWithReal");
 
         Mockito.when(service.refreshToken("tokenNotMatchWithReal")).thenThrow(TokenMismatchException.class);
 
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
-                        .param("refreshToken", refreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(payload)))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void testRefreshToken__InvalidToken__ThrowsInvalidTokenException() throws Exception {
-        String refreshToken = "invalidTokenExample";
+        RefreshTokenPayload payload = new RefreshTokenPayload("invalidTokenExample");
 
         Mockito.when(service.refreshToken("invalidTokenExample")).thenThrow(TokenDidNotPassVerificationException.class);
 
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
-                        .param("refreshToken", refreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(payload)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void testRefreshToken__NotFoundToken__ThrowsTokenNotFoundException() throws Exception {
-        String refreshToken = "tokenNotExist";
+        RefreshTokenPayload payload = new RefreshTokenPayload("tokenNotExist");
 
         Mockito.when(service.refreshToken("tokenNotExist")).thenThrow(TokenNotFoundException.class);
 
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
-                        .param("refreshToken", refreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(payload)))
                 .andExpect(status().isBadRequest());
     }
 }

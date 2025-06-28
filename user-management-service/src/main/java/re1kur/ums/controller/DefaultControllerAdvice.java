@@ -18,8 +18,8 @@ public class DefaultControllerAdvice {
         String errors = ex.getBindingResult().
                 getFieldErrors().stream().
                 map(err -> "%s : %s".formatted(err.getField(),
-                        err.getDefaultMessage())).collect(Collectors.joining("|"));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request accessToken:\n" + errors);
+                        err.getDefaultMessage())).collect(Collectors.joining("\n"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request body:\n" + errors);
     }
 
     @ExceptionHandler(exception = UserNotFoundException.class)
@@ -49,7 +49,7 @@ public class DefaultControllerAdvice {
 
     @ExceptionHandler(exception = TokenNotFoundException.class)
     public ResponseEntity<String> handleTokenNotFoundException(TokenNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(exception = TokenMismatchException.class)

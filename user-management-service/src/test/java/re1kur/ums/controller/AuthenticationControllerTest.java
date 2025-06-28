@@ -16,7 +16,6 @@ import re1kur.core.exception.UserAlreadyRegisteredException;
 import re1kur.core.exception.UserNotFoundException;
 import re1kur.core.payload.LoginRequest;
 import re1kur.core.payload.UserPayload;
-import re1kur.ums.controller.auth.AuthenticationController;
 import re1kur.core.dto.JwtToken;
 import re1kur.ums.service.AuthService;
 
