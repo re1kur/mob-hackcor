@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import re1kur.core.exception.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -55,6 +54,31 @@ public class DefaultControllerAdvice {
 
     @ExceptionHandler(exception = TokenMismatchException.class)
     public ResponseEntity<String> handleTokenMismatchException(TokenMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = TokenHasExpiredException.class)
+    public ResponseEntity<String> handleTokenHasExpiredException(TokenHasExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = CodeMismatchException.class)
+    public ResponseEntity<String> handleCodeMismatchException(CodeMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = CodeHasExpiredException.class)
+    public ResponseEntity<String> handleCodeHasExpiredException(CodeHasExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = CodeNotFoundException.class)
+    public ResponseEntity<String> handleCodeNotFoundException(CodeNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(exception = UserAlreadyVerifiedException.class)
+    public ResponseEntity<String> handleUserAlreadyVerifiedException(UserAlreadyVerifiedException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }

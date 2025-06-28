@@ -7,6 +7,8 @@ server:
   port: 8081
 
 custom:
+  code:
+    ttl-minutes: 5
   jwt:
     ttl-hours: 12
     refresh-ttl-days: 7

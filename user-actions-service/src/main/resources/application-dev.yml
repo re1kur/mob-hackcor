@@ -1,0 +1,12 @@
+spring:
+  docker:
+    compose:
+      enabled: true
+      file: user-actions-service/dev-compose.yml
+  devtools:
+    add-properties: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/api/token/jwks

@@ -1,0 +1,15 @@
+spring:
+  devtools:
+    add-properties: false
+  docker:
+    compose:
+      enabled: false
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://ums-service:8081/api/token/jwks

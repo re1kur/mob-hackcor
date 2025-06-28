@@ -1,0 +1,10 @@
+name: dev-mob-uas
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      - "POSTGRES_USER=developer"
+      - "POSTGRES_PASSWORD=developer"
+      - "POSTGRES_DB=developer"
+    ports:
+      - "5434:5432"

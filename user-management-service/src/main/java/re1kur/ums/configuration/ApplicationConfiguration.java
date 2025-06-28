@@ -29,7 +29,10 @@ public class ApplicationConfiguration {
     public SecurityFilterChain secure(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(manager -> manager
-                        .requestMatchers("/api/auth/**", "api/token/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "api/token/**",
+                                "api/verify/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)

@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS task_attempts
     FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE
 );
 
-
 --changeset re1kur:3
 CREATE TABLE IF NOT EXISTS users_tasks
 (

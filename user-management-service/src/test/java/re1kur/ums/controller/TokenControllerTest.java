@@ -59,7 +59,7 @@ class TokenControllerTest {
         mvc.perform(MockMvcRequestBuilders
                         .put(URL + "/refresh")
                         .param("refreshToken", refreshToken))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
