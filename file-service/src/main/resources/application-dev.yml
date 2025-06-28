@@ -1,0 +1,19 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/api/token/jwks
+  docker:
+    compose:
+      enabled: true
+      file: file-service/dev-compose.yml
+
+minio:
+  access-key: developer
+  secret-key: developer
+  endpoint: http://localhost:9000
+  endpoint-override: http://localhost:9000
+  url:
+    time-to-live: 7
+  default-bucket: developer

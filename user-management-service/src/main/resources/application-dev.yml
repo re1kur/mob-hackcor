@@ -4,9 +4,9 @@ spring:
   docker:
     compose:
       enabled: true
-      file: ./user-management-service/docker-compose.yml
+      file: user-management-service/dev-compose.yml
   liquibase:
-    change-log: db/changelog/db.changelog-master.yml
+    change-log: db/changelog/db.changelog-master-dev.yml
   jpa:
     open-in-view: false
   security:

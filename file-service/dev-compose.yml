@@ -1,0 +1,19 @@
+name: dev-mob-fs
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      - "POSTGRES_USER=developer"
+      - "POSTGRES_PASSWORD=developer"
+      - "POSTGRES_DB=developer"
+    ports:
+      - '5435:5432'
+  minio:
+    image: quay.io/minio/minio:latest
+    environment:
+      - "MINIO_ROOT_USER=developer"
+      - "MINIO_ROOT_PASSWORD=developer"
+    command: server /data --console-address ":9001"
+    ports:
+      - '9000:9000'
+      - '9001:9001'

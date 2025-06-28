@@ -1,12 +1,13 @@
+name: dev-mob-ums
 services:
   dev-postgres:
     image: postgres:17
     ports:
       - "5433:5432"
     environment:
-      - POSTGRES_USER=mobhackcor
-      - POSTGRES_PASSWORD=mobhackcor
-      - POSTGRES_DB=userdb
+      - "POSTGRES_USER=developer"
+      - "POSTGRES_PASSWORD=developer"
+      - "POSTGRES_DB=developer"
   dev-redis:
     image: redis
     ports:
