@@ -3,7 +3,7 @@ package re1kur.ues.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import re1kur.core.FlashcardDto;
+import re1kur.core.dto.FlashcardDto;
 import re1kur.core.dto.CourseDto;
 import re1kur.core.dto.LectureDto;
 import re1kur.core.payload.CoursePayload;

@@ -59,7 +59,7 @@ public class TaskAttemptControllerTest {
 //    void testCreate_ValidPayload_ReturnsCreated() throws Exception {
 //        TaskAttemptPayload payload = TaskAttemptPayload.builder()
 //                .taskId(1L)
-//                .fileContentId(fileId.toString())
+//                .fileContentId(imageFileId.toString())
 //                .textContent("some text")
 //                .build();
 //
@@ -67,7 +67,7 @@ public class TaskAttemptControllerTest {
 //                .id(1L)
 //                .userId(userId.toString())
 //                .taskId(1L)
-//                .fileContentId(fileId.toString())
+//                .fileContentId(imageFileId.toString())
 //                .textContent("some text")
 //                .attemptTime(now)
 //                .build();

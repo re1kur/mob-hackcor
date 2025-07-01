@@ -1,4 +1,4 @@
-package re1kur.core;
+package re1kur.core.dto;
 
 import lombok.Builder;
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import re1kur.core.FlashcardDto;
+import re1kur.core.dto.FlashcardDto;
 import re1kur.core.dto.CourseDto;
 import re1kur.core.dto.LectureDto;
 import re1kur.core.payload.CoursePayload;
